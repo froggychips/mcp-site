@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mcp-trace — see what your MCP servers are doing</title>
+  <meta name="description" content="Stdio MITM proxy that logs JSON-RPC traffic between MCP client and server to a local SQLite file. Privacy by default.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">home</a>
+      <a href="/vault.html">vault</a>
+      <a href="/trace.html">trace</a>
+      <a href="/install.html">install</a>
+      <a href="https://github.com/froggychips">github</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>mcp-trace</h1>
+    <p class="lede">
+      Privacy-by-default stdio MITM proxy between an MCP client (Claude Code,
+      any other host) and an MCP server. Pairs request/response by id and
+      logs metadata to a local SQLite file. Sister project to
+      <a href="/vault.html">mcp-skills-vault</a>.
+    </p>
+
+    <h2>Install</h2>
+    <pre><code>git clone https://github.com/froggychips/mcp-trace.git
+cd mcp-trace
+node bin/mcp-trace.cjs --version</code></pre>
+
+    <p>Zero npm dependencies. Node 22+ built-ins only (<code>node:sqlite</code>, <code>node:child_process</code>, <code>node:readline</code>). On Node 22/24 add <code>--experimental-sqlite</code>; Node 25+ just works.</p>
+
+    <h2>What you get</h2>
+    <ul>
+      <li><strong>Stdio proxy</strong> &mdash; wraps any MCP server, forwards bytes byte-for-byte, and pairs request &harr; response by JSON-RPC id to compute per-call latency.</li>
+      <li><strong>Local SQLite store</strong> &mdash; zero deps via built-in <code>node:sqlite</code>, WAL mode so multiple proxied servers can write concurrently. Default DB at <code>~/.mcp-trace/traces.db</code>.</li>
+      <li><strong>Three CLI subcommands</strong> &mdash; <code>stats</code>, <code>tools</code>, <code>tokens</code>. Bodies are <strong>never</strong> logged unless you opt into <code>--capture-body</code> with <code>MCP_TRACE_CAPTURE_BODY_CONFIRMED=1</code>.</li>
+    </ul>
+
+    <h2>Latest release</h2>
+    <div class="release">
+      <p><strong>v0.1.0 &mdash; initial release</strong> &mdash; 2026-05-22</p>
+      <ul>
+        <li>stdio MITM proxy: <code>mcp-trace proxy &lt;name&gt; -- &lt;command&gt;</code></li>
+        <li>per-event JSON-RPC metadata logging via built-in <code>node:sqlite</code></li>
+        <li>privacy-by-default: bodies require <code>--capture-body</code> <em>and</em> <code>MCP_TRACE_CAPTURE_BODY_CONFIRMED=1</code></li>
+        <li><code>stats</code> / <code>tools</code> / <code>tokens</code> subcommands</li>
+        <li>zero npm dependencies; Node 22+ required</li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-trace/releases/tag/v0.1.0">Full release notes &rarr;</a></p>
+    </div>
+
+    <h2>Quick taste</h2>
+    <pre><code>$ node bin/mcp-trace.cjs stats
+server               calls    p50    p95    errors  tools
+github               42       180    420    1       7
+
+$ node bin/mcp-trace.cjs tools github
+server           tool                         calls   p50    p95    err%   last_seen
+github           search_repositories          18      130    260    0      2m ago
+github           create_issue                 0       -      -      0      never
+
+$ node bin/mcp-trace.cjs tokens github
+# HEURISTIC (~350 tokens/tool). Real cost only observable inside Claude Code.
+github: 47 tools advertised × 350 = ~16450 tokens/session
+  12 tools called in window; estimated wasted budget: ~12250 tokens/turn</code></pre>
+
+    <div class="links">
+      <a href="https://github.com/froggychips/mcp-trace">GitHub</a> &middot;
+      <a href="https://github.com/froggychips/mcp-trace/blob/main/CHANGELOG.md">Changelog</a> &middot;
+      <a href="https://github.com/froggychips/mcp-trace/releases">Releases</a> &middot;
+      <a href="https://github.com/froggychips/mcp-trace/blob/main/LICENSE">License (MIT)</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/froggychips">github.com/froggychips</a>
+      &middot; MIT licensed &middot; &copy; 2026 froggychips
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mcp-skills-vault — install MCP safely</title>
+  <meta name="description" content="Deterministic registry + integrity scanner for Model Context Protocol servers. Pinned hashes, advisory feeds, offline-first.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">home</a>
+      <a href="/vault.html">vault</a>
+      <a href="/trace.html">trace</a>
+      <a href="/install.html">install</a>
+      <a href="https://github.com/froggychips">github</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>mcp-skills-vault</h1>
+    <p class="lede">
+      A deterministic registry + integrity scanner for MCP servers,
+      so installing one stops feeling like <code>curl | bash</code>.
+      Sister project to <a href="/trace.html">mcp-trace</a>.
+    </p>
+
+    <h2>Install</h2>
+    <pre><code># As a Claude Code skill
+git clone https://github.com/froggychips/mcp-skills-vault.git
+mkdir -p ~/.claude/skills
+cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/
+
+# As a CLI (no Claude required)
+node mcp-skills-vault/mcp-ecosystem-intelligence/scripts/orchestrate.cjs \
+  --cwd /path/to/project</code></pre>
+
+    <p>Zero runtime dependencies. Node built-ins only. One JSON file is the entire database.</p>
+
+    <h2>What you get</h2>
+    <ul>
+      <li><strong>Curated DB</strong> &mdash; 112 entries across ~25 categories, all with pinned versions, SPDX licenses, and <code>trust: verified | candidate</code>. 96 Core / 11 Recommended / 5 Experimental.</li>
+      <li><strong>Supply-chain scanner</strong> &mdash; sha512 (npm), sha256 (PyPI), and <code>@sha256:</code> (Docker) integrity pinning, re-verified against the live registry; 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written.</li>
+      <li><strong>Audit installed setup</strong> &mdash; <code>audit_setup.cjs</code> diffs your installed servers against the DB and flags drift, untrusted entries, heavy-unbounded servers, and scope issues.</li>
+    </ul>
+
+    <h2>Latest release</h2>
+    <div class="release">
+      <p><strong>v0.7.0</strong> &mdash; 2026-05-22</p>
+      <ul>
+        <li><code>audit_setup.cjs</code> &mdash; diff installed MCP servers against the DB (#43)</li>
+        <li><code>check_license_drift.cjs</code> &mdash; flag MIT&rarr;BSL/SSPL relicensing (#46)</li>
+        <li><code>detectStack</code>: Swift/JVM/Ruby/PHP/.NET manifests + Jira/Atlassian env signals (#45)</li>
+        <li><code>discover</code>: MCP registry + PyPI candidate sources (#42)</li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.7.0">Full release notes &rarr;</a></p>
+    </div>
+
+    <h2>Quick taste</h2>
+    <pre><code>$ node mcp-ecosystem-intelligence/scripts/orchestrate.cjs
+Stack: Langs: Node | DB: postgres | Infra: aws, teamcity, atlassian
+Needs: database, infra, ci-cd, pm
+
+── Recommended ──────────────────────────────────────────────
+  Core         mcp-server-neon            10 tools  score 105
+  Core         mcp-server-aws             20 tools  score 105
+  Core         mcp-server-filesystem      10 tools  score 105
+  Recommended  teamcity-mcp              null tools  score  65
+
+── Heavy — scope before global install ──────────────────────
+  Experimental mcp-atlassian             72 tools ⚠  score  55
+                 --toolsets jira,confluence</code></pre>
+
+    <div class="links">
+      <a href="https://github.com/froggychips/mcp-skills-vault">GitHub</a> &middot;
+      <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/CHANGELOG.md">Changelog</a> &middot;
+      <a href="https://github.com/froggychips/mcp-skills-vault/releases">Releases</a> &middot;
+      <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/LICENSE">License (MIT)</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/froggychips">github.com/froggychips</a>
+      &middot; MIT licensed &middot; &copy; 2026 froggychips
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>froggychips — tools for taming the MCP supply chain</title>
+  <meta name="description" content="mcp-skills-vault installs MCP servers safely. mcp-trace shows what they're actually doing. No cloud, no telemetry.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">home</a>
+      <a href="/vault.html">vault</a>
+      <a href="/trace.html">trace</a>
+      <a href="/install.html">install</a>
+      <a href="https://github.com/froggychips">github</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Tools for taming the MCP supply chain.</h1>
+    <p class="lede">
+      Two small, offline-first tools for people who run
+      <a href="https://modelcontextprotocol.io">Model Context Protocol</a>
+      servers on their own machines and would like to know what those servers
+      are doing.
+    </p>
+
+    <section class="cards" aria-label="projects">
+      <article class="card">
+        <h3>mcp-skills-vault</h3>
+        <p>Install MCP safely.</p>
+        <p>Curated registry of 112 servers with pinned hashes, license info, and advisory-feed checks before any install command is written.</p>
+        <a class="cta" href="/vault.html">Learn &rarr;</a>
+      </article>
+
+      <article class="card">
+        <h3>mcp-trace</h3>
+        <p>See what it&rsquo;s doing.</p>
+        <p>Stdio MITM proxy that pairs JSON-RPC request/response by id and logs metadata to a local SQLite file. Bodies never captured by default.</p>
+        <a class="cta" href="/trace.html">Learn &rarr;</a>
+      </article>
+    </section>
+
+    <p>
+      No cloud. No telemetry. Same kind of tooling your CI would use,
+      packaged for your laptop.
+    </p>
+
+    <div class="cta-row">
+      <a class="cta" href="/install.html">Install both &rarr;</a>
+      <a class="cta ghost" href="https://github.com/froggychips">GitHub &rarr;</a>
+    </div>
+
+    <h2>Why these two together</h2>
+    <ul>
+      <li><strong>Vault</strong> answers <em>what to install</em> &mdash; integrity-pinned commands, before <code>npx -y</code> runs.</li>
+      <li><strong>Trace</strong> answers <em>what it&rsquo;s doing</em> &mdash; once installed, which tools actually get called, how long they take, and what they cost in tokens.</li>
+      <li>Neither sends anything off your machine. Advisory feeds and registry calls are additive; offline use is the default mode.</li>
+    </ul>
+
+    <h2>Five constraints</h2>
+    <p>Both projects share the same shape:</p>
+    <ul>
+      <li><strong>Offline-first</strong> &mdash; the gate you care about runs with no network.</li>
+      <li><strong>Minimal</strong> &mdash; zero runtime deps; Node built-ins only.</li>
+      <li><strong>Inspectable</strong> &mdash; every output has <code>--json</code>; every entry has an audit trail.</li>
+      <li><strong>Deterministic</strong> &mdash; same input, same output, every run.</li>
+      <li><strong>Boring</strong> &mdash; supply-chain tooling should not be exciting.</li>
+    </ul>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/froggychips">github.com/froggychips</a>
+      &middot; MIT licensed &middot; &copy; 2026 froggychips
+    </p>
+  </footer>
+</body>
+</html>
