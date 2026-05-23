@@ -28,14 +28,18 @@
     </p>
 
     <h2>Install</h2>
-    <pre><code># As a Claude Code skill
+    <pre><code># One-line — no clone, no global install
+npx -y @froggychips/mcp-vault scan --cwd ./my-project
+npx -y @froggychips/mcp-vault audit --strict
+npx -y @froggychips/mcp-vault verify --no-audit
+
+# Prefer it on PATH? Drop the npx prefix after this.
+npm i -g @froggychips/mcp-vault
+
+# As a Claude Code skill (optional)
 git clone https://github.com/froggychips/mcp-skills-vault.git
 mkdir -p ~/.claude/skills
-cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/
-
-# As a CLI (no Claude required)
-node mcp-skills-vault/mcp-ecosystem-intelligence/scripts/orchestrate.cjs \
-  --cwd /path/to/project</code></pre>
+cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
 
     <p>Zero runtime dependencies. Node built-ins only. One JSON file is the entire database.</p>
 
@@ -48,18 +52,17 @@ node mcp-skills-vault/mcp-ecosystem-intelligence/scripts/orchestrate.cjs \
 
     <h2>Latest release</h2>
     <div class="release">
-      <p><strong>v0.7.0</strong> &mdash; 2026-05-22</p>
+      <p><strong>v0.8.0</strong> &mdash; 2026-05-23</p>
       <ul>
-        <li><code>audit_setup.cjs</code> &mdash; diff installed MCP servers against the DB (#43)</li>
-        <li><code>check_license_drift.cjs</code> &mdash; flag MIT&rarr;BSL/SSPL relicensing (#46)</li>
-        <li><code>detectStack</code>: Swift/JVM/Ruby/PHP/.NET manifests + Jira/Atlassian env signals (#45)</li>
-        <li><code>discover</code>: MCP registry + PyPI candidate sources (#42)</li>
+        <li><code>mcp-vault</code> CLI &mdash; one-line install via <code>npx -y @froggychips/mcp-vault</code>; pass-through dispatcher over <code>scan</code> / <code>audit</code> / <code>verify</code> / <code>install</code> / <code>discover</code> / <code>eval</code> / <code>docker-drift</code> / <code>license-drift</code> (#50)</li>
+        <li>npm-publishable package &mdash; scoped <code>@froggychips/mcp-vault</code>, zero runtime deps, files-whitelist</li>
+        <li>Docs sync &mdash; FAQ (en + ru), CONTRIBUTING, PHILOSOPHY, demo.gif (first actual render &mdash; fixed a stale <code>Sleep</code> unit bug in the vhs tape)</li>
       </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.7.0">Full release notes &rarr;</a></p>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.8.0">Full release notes &rarr;</a></p>
     </div>
 
     <h2>Quick taste</h2>
-    <pre><code>$ node mcp-ecosystem-intelligence/scripts/orchestrate.cjs
+    <pre><code>$ npx -y @froggychips/mcp-vault scan
 Stack: Langs: Node | DB: postgres | Infra: aws, teamcity, atlassian
 Needs: database, infra, ci-cd, pm
 
@@ -74,6 +77,7 @@ Needs: database, infra, ci-cd, pm
                  --toolsets jira,confluence</code></pre>
 
     <div class="links">
+      <a href="https://www.npmjs.com/package/@froggychips/mcp-vault">npm</a> &middot;
       <a href="https://github.com/froggychips/mcp-skills-vault">GitHub</a> &middot;
       <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/CHANGELOG.md">Changelog</a> &middot;
       <a href="https://github.com/froggychips/mcp-skills-vault/releases">Releases</a> &middot;

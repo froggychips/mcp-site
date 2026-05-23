@@ -34,18 +34,18 @@
     </ul>
 
     <section class="step">
-      <h3>1. Install the vault as a Claude Code skill</h3>
-      <p>One <code>cp</code> from the cloned repo into your skills directory.</p>
-      <pre><code>git clone https://github.com/froggychips/mcp-skills-vault.git
-mkdir -p ~/.claude/skills
-cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
+      <h3>1. Scan your current project</h3>
+      <p>One command. No clone, no global install. Detects your stack from manifests and prints what to install. The offline gate (<code>verify --no-audit</code>) runs without network.</p>
+      <pre><code>npx -y @froggychips/mcp-vault scan --cwd .</code></pre>
+      <p>Prefer it on PATH for repeated use: <code>npm i -g @froggychips/mcp-vault</code>, then drop the <code>npx -y</code> prefix.</p>
     </section>
 
     <section class="step">
-      <h3>2. Scan your current project</h3>
-      <p>The orchestrator detects your stack from manifests and prints what to install. No network needed for the offline gate.</p>
-      <pre><code>node mcp-skills-vault/mcp-ecosystem-intelligence/scripts/orchestrate.cjs \
-  --cwd .</code></pre>
+      <h3>2. Optional &mdash; install the vault as a Claude Code skill</h3>
+      <p>If you want Claude to call the vault by itself when you ask &ldquo;what MCP should I add?&rdquo;, drop the skill folder into your skills directory.</p>
+      <pre><code>git clone https://github.com/froggychips/mcp-skills-vault.git
+mkdir -p ~/.claude/skills
+cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
     </section>
 
     <section class="step">
