@@ -35,7 +35,7 @@
     "description": "Deterministic registry + supply-chain integrity scanner for Model Context Protocol (MCP) servers. Hash-pinned 112-entry DB with 94 hand-verified entries, sha512/sha256/Docker @sha256 integrity, 4 advisory feeds (npm bulk + OSV.dev + GHSA + Snyk), offline-first audit, token-cost guidance, license-drift detection.",
     "url": "https://mcp.froggychips.xyz/vault.html",
     "downloadUrl": "https://www.npmjs.com/package/@froggychips/mcp-vault",
-    "softwareVersion": "0.8.0",
+    "softwareVersion": "0.9.0",
     "license": "https://opensource.org/licenses/MIT",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "author": { "@type": "Organization", "name": "froggychips", "url": "https://github.com/froggychips" }
@@ -63,9 +63,10 @@
 
     <h2>Install</h2>
     <pre><code># One-line — no clone, no global install
-npx -y @froggychips/mcp-vault scan --cwd ./my-project
-npx -y @froggychips/mcp-vault audit --strict
-npx -y @froggychips/mcp-vault verify --no-audit
+npx -y @froggychips/mcp-vault scan --cwd ./my-project    # what to install for this stack
+npx -y @froggychips/mcp-vault list                       # all 112 servers in the DB
+npx -y @froggychips/mcp-vault audit --strict             # diff installed vs DB
+npx -y @froggychips/mcp-vault verify --no-audit          # integrity gate, offline
 
 # Prefer it on PATH? Drop the npx prefix after this.
 npm i -g @froggychips/mcp-vault
@@ -80,11 +81,21 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
     <h2>What you get</h2>
     <ul>
       <li><strong>Curated DB</strong> &mdash; 112 entries across ~25 categories, all with pinned versions, SPDX licenses, and <code>trust: verified | candidate</code>. 96 Core / 11 Recommended / 5 Experimental.</li>
+      <li><strong>Browse it</strong> &mdash; <code>mcp-vault list</code> shows every entry with name / category / tier / trust / install command. Filters: <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> for scripts.</li>
       <li><strong>Supply-chain scanner</strong> &mdash; sha512 (npm), sha256 (PyPI), and <code>@sha256:</code> (Docker) integrity pinning, re-verified against the live registry; 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written.</li>
-      <li><strong>Audit installed setup</strong> &mdash; <code>audit_setup.cjs</code> diffs your installed servers against the DB and flags drift, untrusted entries, heavy-unbounded servers, and scope issues.</li>
+      <li><strong>Audit installed setup</strong> &mdash; <code>mcp-vault audit</code> diffs your installed servers against the DB and flags drift, untrusted entries, heavy-unbounded servers, and scope issues.</li>
     </ul>
 
     <h2>Latest release</h2>
+    <div class="release">
+      <p><strong>v0.9.0</strong> &mdash; 2026-05-23</p>
+      <ul>
+        <li><code>mcp-vault list</code> (alias <code>ls</code>) &mdash; show every server in the vault DB with filters <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> output. Closes the &ldquo;I don&rsquo;t know what to install&rdquo; gap (#54)</li>
+        <li><code>mcp-vault install</code> with no name &mdash; now points the user at <code>list</code> (three variants) and <code>scan</code>, plus reminds about <code>--global</code> vs project-scoped <code>.mcp.json</code></li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.9.0">Full release notes &rarr;</a></p>
+    </div>
+
     <div class="release">
       <p><strong>v0.8.0</strong> &mdash; 2026-05-23</p>
       <ul>
