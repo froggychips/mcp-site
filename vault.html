@@ -35,7 +35,7 @@
     "description": "Deterministic registry + supply-chain integrity scanner for Model Context Protocol (MCP) servers. Hash-pinned 112-entry DB with 94 hand-verified entries, sha512/sha256/Docker @sha256 integrity, 4 advisory feeds (npm bulk + OSV.dev + GHSA + Snyk), offline-first audit, token-cost guidance, license-drift detection.",
     "url": "https://mcp.froggychips.xyz/vault.html",
     "downloadUrl": "https://www.npmjs.com/package/@froggychips/mcp-vault",
-    "softwareVersion": "0.9.0",
+    "softwareVersion": "0.10.0",
     "license": "https://opensource.org/licenses/MIT",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "author": { "@type": "Organization", "name": "froggychips", "url": "https://github.com/froggychips" }
@@ -97,6 +97,16 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
     </ul>
 
     <h2>Latest release</h2>
+    <div class="release">
+      <p><strong>v0.10.0</strong> &mdash; 2026-05-24</p>
+      <ul>
+        <li><code>mcp-vault doctor</code> &mdash; local readiness checks for Node, <code>gh</code>, Docker, <code>uvx</code>, project MCP config, and global Claude config without printing token values.</li>
+        <li><code>mcp-vault verify --offline</code> &mdash; true network-free DB-pin gate. <code>--no-audit</code> now means &ldquo;skip advisory APIs&rdquo;, not offline.</li>
+        <li><code>mcp-vault site-registry</code> &mdash; generate a browsable public registry page and adjacent <code>registry.json</code> from <code>tools_database.json</code>.</li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.10.0">Full release notes &rarr;</a></p>
+    </div>
+
     <div class="release">
       <p><strong>v0.9.0</strong> &mdash; 2026-05-23</p>
       <ul>
