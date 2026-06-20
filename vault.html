@@ -35,7 +35,7 @@
     "description": "Deterministic registry + supply-chain integrity scanner for Model Context Protocol (MCP) servers. Hash-pinned 114-entry DB with 94 hand-verified entries, sha512/sha256/Docker @sha256 integrity, 4 advisory feeds (npm bulk + OSV.dev + GHSA + Snyk), offline-first audit, token-cost guidance, license-drift detection.",
     "url": "https://mcp.froggychips.xyz/vault.html",
     "downloadUrl": "https://www.npmjs.com/package/@froggychips/mcp-vault",
-    "softwareVersion": "0.10.0",
+    "softwareVersion": "0.12.0",
     "license": "https://opensource.org/licenses/MIT",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "author": { "@type": "Organization", "name": "froggychips", "url": "https://github.com/froggychips" }
@@ -85,6 +85,7 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
       <li><strong>Curated DB</strong> &mdash; 114 entries across ~26 categories, all with pinned versions, SPDX licenses, and <code>trust: verified | candidate</code>. 20 Core / 76 Recommended / 18 Experimental.</li>
       <li><strong>Browse it</strong> &mdash; <code>mcp-vault list</code> shows every entry with name / category / tier / trust / install command. Filters: <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> for scripts.</li>
       <li><strong>Supply-chain scanner</strong> &mdash; sha512 (npm), sha256 (PyPI), and <code>@sha256:</code> (Docker) integrity pinning, re-verified against the live registry; 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written.</li>
+      <li><strong>Behavioural smoke</strong> &mdash; <code>mcp-vault eval --sandbox</code> spawns a server jailed in an ephemeral container, runs the <code>initialize</code> &rarr; <code>tools/list</code> handshake, counts tools and lints each schema. The hash proves you got the file; this proves the file actually starts.</li>
       <li><strong>Audit installed setup</strong> &mdash; <code>mcp-vault audit</code> diffs your installed servers against the DB and flags drift, untrusted entries, heavy-unbounded servers, and scope issues.</li>
       <li><strong>Doctor</strong> &mdash; <code>mcp-vault doctor</code> checks Node, <code>gh</code>, Docker, <code>uvx</code>, and Claude MCP config readiness without printing token values.</li>
     </ul>
@@ -98,6 +99,23 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
 
     <h2>Latest release</h2>
     <div class="release">
+      <p><strong>v0.12.0</strong> &mdash; 2026-06-20</p>
+      <ul>
+        <li>Sandboxed PR-time behavioural smoke &mdash; <code>mcp-vault eval --sandbox</code> runs each changed server jailed in an ephemeral container; default-deny spawn policy; <code>failure_class</code> taxonomy (NEEDS_ENV / NEEDS_NET / TIMEOUT / NO_TOOLS / CRASH).</li>
+        <li>Shared zero-dep <code>mcp_stdio.cjs</code> wire core, vendored in common with <a href="/trace.html">mcp-trace</a> (#64).</li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.12.0">Full release notes &rarr;</a></p>
+    </div>
+
+    <div class="release">
+      <p><strong>v0.11.0</strong> &mdash; 2026-06-20</p>
+      <ul>
+        <li>Promoted <code>@anyproto/anytype-mcp</code> + <code>touchdesigner-mcp-server</code> from the discovery inbox &mdash; DB now 114 entries (#62).</li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.11.0">Full release notes &rarr;</a></p>
+    </div>
+
+    <div class="release">
       <p><strong>v0.10.0</strong> &mdash; 2026-05-24</p>
       <ul>
         <li><code>mcp-vault doctor</code> &mdash; local readiness checks for Node, <code>gh</code>, Docker, <code>uvx</code>, project MCP config, and global Claude config without printing token values.</li>
@@ -105,25 +123,6 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
         <li><code>mcp-vault site-registry</code> &mdash; generate a browsable public registry page and adjacent <code>registry.json</code> from <code>tools_database.json</code>.</li>
       </ul>
       <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.10.0">Full release notes &rarr;</a></p>
-    </div>
-
-    <div class="release">
-      <p><strong>v0.9.0</strong> &mdash; 2026-05-23</p>
-      <ul>
-        <li><code>mcp-vault list</code> (alias <code>ls</code>) &mdash; show every server in the vault DB with filters <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> output. Closes the &ldquo;I don&rsquo;t know what to install&rdquo; gap (#54)</li>
-        <li><code>mcp-vault install</code> with no name &mdash; now points the user at <code>list</code> (three variants) and <code>scan</code>, plus reminds about <code>--global</code> vs project-scoped <code>.mcp.json</code></li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.9.0">Full release notes &rarr;</a></p>
-    </div>
-
-    <div class="release">
-      <p><strong>v0.8.0</strong> &mdash; 2026-05-23</p>
-      <ul>
-        <li><code>mcp-vault</code> CLI &mdash; one-line install via <code>npx -y @froggychips/mcp-vault</code>; pass-through dispatcher over <code>scan</code> / <code>audit</code> / <code>verify</code> / <code>install</code> / <code>discover</code> / <code>eval</code> / <code>docker-drift</code> / <code>license-drift</code> (#50)</li>
-        <li>npm-publishable package &mdash; scoped <code>@froggychips/mcp-vault</code>, zero runtime deps, files-whitelist</li>
-        <li>Docs sync &mdash; FAQ (en + ru), CONTRIBUTING, PHILOSOPHY, demo.gif (first actual render &mdash; fixed a stale <code>Sleep</code> unit bug in the vhs tape)</li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.8.0">Full release notes &rarr;</a></p>
     </div>
 
     <h2>Quick taste</h2>
