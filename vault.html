@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>mcp-skills-vault — install MCP safely</title>
-  <meta name="description" content="Deterministic registry + supply-chain integrity scanner for Model Context Protocol servers. Hash-pinned 112-entry DB, 4 advisory feeds, offline audit, token-cost guidance. npx -y @froggychips/mcp-vault.">
+  <meta name="description" content="Deterministic registry + supply-chain integrity scanner for Model Context Protocol servers. Hash-pinned 114-entry DB, 4 advisory feeds, offline audit, token-cost guidance. npx -y @froggychips/mcp-vault.">
   <link rel="canonical" href="https://mcp.froggychips.xyz/vault.html">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
@@ -13,14 +13,14 @@
   <meta property="og:site_name" content="froggychips">
   <meta property="og:url" content="https://mcp.froggychips.xyz/vault.html">
   <meta property="og:title" content="mcp-skills-vault — make MCP supply chain boring">
-  <meta property="og:description" content="Hash-pinned 112-entry MCP server registry. 4 advisory feeds before install. Offline-first audit. One line: npx -y @froggychips/mcp-vault scan.">
+  <meta property="og:description" content="Hash-pinned 114-entry MCP server registry. 4 advisory feeds before install. Offline-first audit. One line: npx -y @froggychips/mcp-vault scan.">
   <meta property="og:image" content="https://mcp.froggychips.xyz/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="mcp-skills-vault — make MCP supply chain boring">
-  <meta name="twitter:description" content="Hash-pinned 112-entry MCP server registry. 4 advisory feeds before install. Offline-first audit. One line: npx -y @froggychips/mcp-vault scan.">
+  <meta name="twitter:description" content="Hash-pinned 114-entry MCP server registry. 4 advisory feeds before install. Offline-first audit. One line: npx -y @froggychips/mcp-vault scan.">
   <meta name="twitter:image" content="https://mcp.froggychips.xyz/og-image.png">
 
   <script type="application/ld+json">
@@ -32,7 +32,7 @@
     "applicationCategory": "DeveloperApplication",
     "applicationSubCategory": "SecurityApplication",
     "operatingSystem": "macOS, Linux, Windows",
-    "description": "Deterministic registry + supply-chain integrity scanner for Model Context Protocol (MCP) servers. Hash-pinned 112-entry DB with 94 hand-verified entries, sha512/sha256/Docker @sha256 integrity, 4 advisory feeds (npm bulk + OSV.dev + GHSA + Snyk), offline-first audit, token-cost guidance, license-drift detection.",
+    "description": "Deterministic registry + supply-chain integrity scanner for Model Context Protocol (MCP) servers. Hash-pinned 114-entry DB with 94 hand-verified entries, sha512/sha256/Docker @sha256 integrity, 4 advisory feeds (npm bulk + OSV.dev + GHSA + Snyk), offline-first audit, token-cost guidance, license-drift detection.",
     "url": "https://mcp.froggychips.xyz/vault.html",
     "downloadUrl": "https://www.npmjs.com/package/@froggychips/mcp-vault",
     "softwareVersion": "0.10.0",
@@ -65,7 +65,7 @@
     <h2>Install</h2>
     <pre><code># One-line — no clone, no global install
 npx -y @froggychips/mcp-vault scan --cwd ./my-project    # what to install for this stack
-npx -y @froggychips/mcp-vault list                       # all 112 servers in the DB
+npx -y @froggychips/mcp-vault list                       # all 114 servers in the DB
 npx -y @froggychips/mcp-vault audit --strict             # diff installed vs DB
 npx -y @froggychips/mcp-vault verify --offline           # true offline DB-pin gate
 npx -y @froggychips/mcp-vault doctor                     # local readiness check
@@ -82,7 +82,7 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
 
     <h2>What you get</h2>
     <ul>
-      <li><strong>Curated DB</strong> &mdash; 112 entries across ~25 categories, all with pinned versions, SPDX licenses, and <code>trust: verified | candidate</code>. 96 Core / 11 Recommended / 5 Experimental.</li>
+      <li><strong>Curated DB</strong> &mdash; 114 entries across ~26 categories, all with pinned versions, SPDX licenses, and <code>trust: verified | candidate</code>. 20 Core / 76 Recommended / 18 Experimental.</li>
       <li><strong>Browse it</strong> &mdash; <code>mcp-vault list</code> shows every entry with name / category / tier / trust / install command. Filters: <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> for scripts.</li>
       <li><strong>Supply-chain scanner</strong> &mdash; sha512 (npm), sha256 (PyPI), and <code>@sha256:</code> (Docker) integrity pinning, re-verified against the live registry; 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written.</li>
       <li><strong>Audit installed setup</strong> &mdash; <code>mcp-vault audit</code> diffs your installed servers against the DB and flags drift, untrusted entries, heavy-unbounded servers, and scope issues.</li>
