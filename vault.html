@@ -82,10 +82,18 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
 
     <h2>What you get</h2>
     <ul>
-      <li><strong>Curated DB</strong> &mdash; 114 entries across ~26 categories, all with pinned versions, SPDX licenses, and <code>trust: verified | candidate</code>. 20 Core / 76 Recommended / 18 Experimental.</li>
+      <li><strong>Curated DB</strong> &mdash; 114 entries across 26 categories, all with pinned versions, SPDX licenses, and <code>trust: verified | candidate</code>. 20 Core / 71 Recommended / 23 Experimental; 94 of 114 hand-vetted.</li>
       <li><strong>Browse it</strong> &mdash; <code>mcp-vault list</code> shows every entry with name / category / tier / trust / install command. Filters: <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> for scripts.</li>
-      <li><strong>Supply-chain scanner</strong> &mdash; sha512 (npm), sha256 (PyPI), and <code>@sha256:</code> (Docker) integrity pinning, re-verified against the live registry; 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written.</li>
-      <li><strong>Behavioural smoke</strong> &mdash; <code>mcp-vault eval --sandbox</code> spawns a server jailed in an ephemeral container, runs the <code>initialize</code> &rarr; <code>tools/list</code> handshake, counts tools and lints each schema. The hash proves you got the file; this proves the file actually starts.</li>
+      <li><strong>Supply-chain gate that fails closed</strong> &mdash; sha512 (npm), sha256 (PyPI) and <code>@sha256:</code> (Docker) pins, re-verified against the live registry, with 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written. Anything it <em>could not</em> check reports <code>UNVERIFIED</code> rather than passing: a feed being down is not evidence that a pin is good.</li>
+      <li><strong>Hash the bytes yourself</strong> &mdash; <code>--deep</code> downloads each artifact and hashes it locally instead of comparing the pin against metadata served by the same host as the tarball. npm&rsquo;s registry signature over <code>name@version:integrity</code> is verified on every run (100 of 102 npm entries today), and provenance attestations are read and compared with the recorded source repository.</li>
+      <li><strong>The whole dependency tree</strong> &mdash; <code>--deps</code> resolves it with <code>npm install --package-lock-only --ignore-scripts</code> (nothing installed, no package code run) and checks every package in it. Across the DB that is 19,377 transitive packages, 25 entries whose <em>dependencies</em> run install scripts, and 38 with a high or critical advisory somewhere in the tree.</li>
+      <li><strong>What actually gets written</strong> &mdash; <code>install</code> writes the version the gate verified (<code>pkg@1.2.3</code>, <code>pkg==1.2.3</code>, <code>image@sha256:&hellip;</code>), and refuses an unpinned command. <code>npx -y pkg</code> resolves <code>latest</code> at every start, which is not the artifact anyone reviewed. <code>--host</code> targets Claude Code, Claude Desktop, Cursor, VS Code, or prints a TOML block for Codex.</li>
+      <li><strong>Check what your hosts really launch</strong> &mdash; <code>mcp-vault verify --installed</code> reads the configs themselves instead of the DB, and reports unpinned commands, servers that are not in the vault, local binaries and remote endpoints as what they are.</li>
+      <li><strong>Trust as dated evidence</strong> &mdash; each dimension (artifact, signature, provenance, source binding, advisories, dependencies, smoke) carries its own status and the date it was established, with its own shelf life: a hash match holds for 90 days, &ldquo;no advisories&rdquo; for 7. <code>trust</code> is derived from that, and dropped when the version moves.</li>
+      <li><strong>One policy file, not seven flags</strong> &mdash; <code>.mcp-vault.policy.json</code> sets the bar once (unverified handling, signature and provenance requirements, licence allow/deny, minimum health, acceptable trust tiers) so CI and your shell enforce the same one. An unknown key is an error, not a no-op.</li>
+      <li><strong>Behavioural smoke</strong> &mdash; <code>mcp-vault eval --sandbox</code> spawns a server jailed in an ephemeral container, runs the <code>initialize</code> &rarr; <code>tools/list</code> handshake, counts tools and lints each schema. A <code>docker run</code> entry is rebuilt from its pinned digest under the jail&rsquo;s own flags, because the entry&rsquo;s flags come from a file a pull request can edit. The hash proves you got the file; this proves the file starts.</li>
+      <li><strong>Context budget</strong> &mdash; <code>mcp-vault budget</code> totals what your configured servers inject into every request, stating for each number whether it was measured from a real <code>tools/list</code> payload or estimated from a tool count.</li>
+      <li><strong>Machine-readable</strong> &mdash; <code>--json</code> for every command, and <code>verify --sarif</code> so each finding lands on the <code>tools_database.json</code> line that caused it in GitHub code scanning.</li>
       <li><strong>Audit installed setup</strong> &mdash; <code>mcp-vault audit</code> diffs your installed servers against the DB and flags drift, untrusted entries, heavy-unbounded servers, and scope issues.</li>
       <li><strong>Doctor</strong> &mdash; <code>mcp-vault doctor</code> checks Node, <code>gh</code>, Docker, <code>uvx</code>, and Claude MCP config readiness without printing token values.</li>
     </ul>
@@ -95,9 +103,23 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
       <li><strong>Not a sandbox.</strong> Installing an MCP server still runs that server with the permissions of your MCP host.</li>
       <li><strong>Not a runtime monitor.</strong> Vault is an install-time gate; use <a href="/trace.html">mcp-trace</a> or another monitor for runtime behaviour.</li>
       <li><strong>Not proof that a server is benign.</strong> Hashes prove you got the artifact you expected, not that the artifact is safe.</li>
+      <li><strong>Provenance is read, not cryptographically verified.</strong> The attestation is parsed and its claimed source repository compared with the recorded one. Verifying the sigstore bundle itself &mdash; Fulcio chain, Rekor inclusion proof &mdash; is not something this tool does, and it says so rather than implying otherwise.</li>
     </ul>
 
     <h2>Latest release</h2>
+    <div class="release">
+      <p><strong>Unreleased</strong> &mdash; on <code>master</code>, not yet on npm</p>
+      <ul>
+        <li><strong>The gate fails closed.</strong> Anything it could not check &mdash; registry unreachable, no stored hash, a wheel-only release, an install command it cannot parse &mdash; reports <code>UNVERIFIED</code> and fails under <code>--fail-unverified</code>, instead of passing quietly.</li>
+        <li><strong><code>--deep</code></strong> hashes the artifact locally rather than comparing the pin against metadata from the same registry; <strong>npm registry signatures</strong> verified on every run; <strong>provenance</strong> read and compared with the recorded repository.</li>
+        <li><strong><code>--deps</code></strong> resolves the dependency tree without installing it and checks every package in it against OSV &mdash; where most install hooks actually live.</li>
+        <li><strong><code>verify --installed</code></strong> checks what your hosts launch, not what the DB says; <strong><code>budget</code></strong> totals the context cost; <strong><code>install --host</code></strong> writes Cursor, VS Code, Claude Desktop or a Codex snippet.</li>
+        <li><strong>Trust became dated evidence</strong> per dimension, with shelf lives, computed rather than typed. <strong><code>--json</code> and <code>--sarif</code></strong> for every finding.</li>
+        <li><strong>CI stopped running pull-request code unprotected</strong> on the machine that holds everything, and the sandbox no longer trusts flags that come from the database.</li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/pull/89">What went into it &rarr;</a></p>
+    </div>
+
     <div class="release">
       <p><strong>v0.12.0</strong> &mdash; 2026-06-20</p>
       <ul>
