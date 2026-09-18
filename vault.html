@@ -119,6 +119,14 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
 
     <h2>Latest release</h2>
     <div class="release">
+      <p><strong>v0.14.1</strong> &mdash; 2026-09-18</p>
+      <ul>
+        <li><strong>A rule about a check that never ran is <code>unknown</code>, not a denial.</strong> Found by installing 0.14.0 from npm and using it: <code>explain &lt;name&gt;</code> without <code>--verify</code> refused an entry on &ldquo;no verifiable registry signature&rdquo; while that entry&rsquo;s stored evidence said the signature <em>was</em> verified &mdash; and the same command with <code>--verify</code> did not refuse. The policy evaluator decides from the <em>absence of a finding</em>, which is right after a scan and wrong when no scan ran; it was being handed an empty list. Gate-dependent rules are now answered from the evidence, with a third outcome that never blocks and is printed separately, so &ldquo;allowed&rdquo; and &ldquo;allowed as far as anyone has looked&rdquo; stop reading alike.</li>
+      </ul>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.14.1">Full release notes &rarr;</a></p>
+    </div>
+
+    <div class="release">
       <p><strong>v0.14.0</strong> &mdash; 2026-09-17</p>
       <ul>
         <li><strong>Trust stopped being a word somebody typed.</strong> The evidence model is filled for the whole database: eight dimensions, each with the date it was established and its own shelf life, and <code>trust</code> computed from them &mdash; 101 verified, 1 candidate, 12 unverified. The 12 are specific: eight advisories against a pinned version, two repositories that disagree with the registry&rsquo;s, one yanked release, one unpublished package.</li>
