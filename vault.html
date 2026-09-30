@@ -63,12 +63,16 @@
     </p>
 
     <h2>Install</h2>
-    <pre><code># One-line — no clone, no global install
-npx -y @froggychips/mcp-vault scan --cwd ./my-project    # what to install for this stack
-npx -y @froggychips/mcp-vault list                       # all 114 servers in the DB
-npx -y @froggychips/mcp-vault audit --strict             # diff installed vs DB
-npx -y @froggychips/mcp-vault verify --offline           # true offline DB-pin gate
-npx -y @froggychips/mcp-vault doctor                     # local readiness check
+    <pre><code># One command. No network calls: every claim comes from evidence
+# already on disk, and the report says so rather than implying
+# it was checked just now.
+npx -y @froggychips/mcp-vault status
+
+# Then, when you want a live answer or more detail:
+npx -y @froggychips/mcp-vault verify --installed          # re-hash what your hosts launch
+npx -y @froggychips/mcp-vault explain &lt;name&gt;             # why one entry is allowed or denied
+npx -y @froggychips/mcp-vault scan --cwd ./my-project     # what to install for this stack
+npx -y @froggychips/mcp-vault audit --strict              # every drift and scope finding
 
 # Prefer it on PATH? Drop the npx prefix after this.
 npm i -g @froggychips/mcp-vault
@@ -82,7 +86,7 @@ cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
 
     <h2>What you get</h2>
     <ul>
-      <li><strong>Curated DB</strong> &mdash; 114 entries across 26 categories, all with pinned versions and SPDX licenses. 20 Core / 71 Recommended / 23 Experimental. <code>trust</code> is <em>derived from dated evidence</em> rather than typed by hand: 101 verified, 1 candidate, 12 unverified &mdash; the 12 being eight entries with an advisory against the pinned version, two whose repository disagrees with the registry&rsquo;s, one yanked and one unpublished.</li>
+      <li><strong>Curated DB</strong> &mdash; 114 entries across 26 categories, all with pinned versions and SPDX licenses. <code>trust</code> is <em>derived from dated evidence</em> rather than typed by hand: 101 verified, 1 candidate, 12 unverified &mdash; the 12 being eight entries with an advisory against the pinned version, two whose repository disagrees with the registry&rsquo;s, one yanked and one unpublished. The tier is derived the same way, at read time: <strong>0 Core / 101 Recommended / 4 Experimental / 9 Deprecated</strong>. Core is empty on purpose &mdash; 38 entries do start and list tools, but no eval row yet records <em>which artifact it launched</em>, and a pass for <code>x@1</code> is not a statement about <code>x@2</code>.</li>
       <li><strong>Browse it</strong> &mdash; <code>mcp-vault list</code> shows every entry with name / category / tier / trust / install command. Filters: <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> for scripts.</li>
       <li><strong>Supply-chain gate that fails closed</strong> &mdash; sha512 (npm), sha256 (PyPI) and <code>@sha256:</code> (Docker) pins, re-verified against the live registry, with 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written. Anything it <em>could not</em> check reports <code>UNVERIFIED</code> rather than passing: a feed being down is not evidence that a pin is good.</li>
       <li><strong>Hash the bytes yourself</strong> &mdash; <code>--deep</code> downloads each artifact and hashes it locally instead of comparing the pin against metadata served by the same host as the tarball. npm&rsquo;s registry signature over <code>name@version:integrity</code> is verified on every run (100 of 102 npm entries today), and provenance attestations are read and compared with the recorded source repository.</li>
@@ -205,8 +209,12 @@ Needs: database, infra, ci-cd, pm
     "infra": ["kubernetes", "teamcity", "atlassian"]
   },
   "recommended": [
-    { "name": "mcp-server-neon", "classification": "Core", "health_score": 105 },
-    { "name": "teamcity-mcp", "classification": "Recommended", "health_score": 65 }
+    { "name": "mcp-server-neon", "classification": "Recommended",
+      "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+      "health_score": 80 },
+    { "name": "teamcity-mcp", "classification": "Recommended",
+      "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+      "health_score": 65 }
   ],
   "heavy": [
     { "name": "mcp-atlassian", "est_tools_count": 72 }
