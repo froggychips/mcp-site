@@ -1,0 +1,296 @@
+name: build-from-vault
+
+# Rebuilds the generated part of mcp.froggychips.xyz from a PUBLISHED release of
+# @froggychips/mcp-vault on npm (repo froggychips/mcp-skills-vault), instead of
+# copying registry.html / registry.json over by hand.
+#
+# How the package is fetched — nothing from it is executed except the CLI's own
+# generators, and no lifecycle script runs anywhere:
+#   1. version: the workflow_dispatch input, or `npm view … version` (latest);
+#   2. `npm pack …@<ver> --ignore-scripts` downloads the tarball only;
+#   3. its sha512 is computed here and compared with `dist.integrity` from
+#      `npm view`; a mismatch stops the job;
+#   4. registry signature (and provenance, when the release has attestations)
+#      via `npm audit signatures` in a throwaway project installed with
+#      --ignore-scripts (the package has no dependencies);
+#   5. the tarball is unpacked with tar and run as `node package/bin/mcp-vault.cjs`.
+# Never `npx -y`, never `npm install` with scripts — the same approach as
+# action.yml in mcp-skills-vault.
+#
+# What it may change — and nothing else (checked before the commit; a path
+# outside the list fails the job):
+#   registry.html, registry.json   — `site-registry` (every release)
+#   badges/**, entry/**            — `site-registry --out` (vault #119)
+#   v0.1/** (incl. x/…/toolhive.json) — `site-registry --out` (vault #126)
+# With --out a single `site-registry --out <site root> --base-url <url>` call
+# writes all of it (it runs `badge --write` / `export-registry` itself).
+# The command and its --out flag are detected from --help of the downloaded
+# version; whatever it lacks is skipped with a notice in the job summary.
+# 0.15.x `site-registry` has no --out: it writes into the unpacked package's
+# docs/site under RUNNER_TEMP, and only registry.html/json are taken from it.
+# Hand-written pages (index, vault, trace, install, style, sitemap.xml, …) are
+# never touched.
+
+on:
+  schedule:
+    - cron: '17 5 * * *'   # daily, 05:17 UTC
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Exact @froggychips/mcp-vault version (e.g. 0.15.2) or "latest"'
+        required: false
+        default: latest
+      require_provenance:
+        description: 'Fail when the release has no npm provenance attestation'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-from-vault
+  cancel-in-progress: false
+
+env:
+  PKG: '@froggychips/mcp-vault'
+  SITE_BASE_URL: https://mcp.froggychips.xyz
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+        with:
+          ref: main
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020   # v7.0.0
+        with:
+          node-version: '22'
+
+      # Inputs reach the shell through env, never through ${{ }} in the script.
+      - name: Resolve version
+        id: ver
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          want="${INPUT_VERSION:-latest}"
+          if [ "$want" = "latest" ]; then
+            want="$(npm view "$PKG" version)"
+          fi
+          if ! [[ "$want" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::version must be exact (e.g. 0.15.2) or 'latest', got '$want'"
+            exit 2
+          fi
+          echo "version=$want" >> "$GITHUB_OUTPUT"
+          echo "mcp-vault version: $want"
+
+      - name: Fetch and verify the tarball
+        id: pkg
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+          REQUIRE_PROVENANCE: ${{ inputs.require_provenance || 'false' }}
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/mcp-vault-pkg"
+          rm -rf "$dir" && mkdir -p "$dir"
+          npm view "$PKG@$VERSION" --json > "$dir/meta.json"
+          expected="$(node -p "require(process.argv[1]).dist.integrity" "$dir/meta.json")"
+          attest="$(node -p "(require(process.argv[1]).dist.attestations||{}).url||''" "$dir/meta.json")"
+
+          npm pack "$PKG@$VERSION" --pack-destination "$dir" --ignore-scripts --silent > "$dir/name.txt"
+          tgz="$dir/$(tail -n 1 "$dir/name.txt")"
+          actual="sha512-$(node -e "process.stdout.write(require('crypto').createHash('sha512').update(require('fs').readFileSync(process.argv[1])).digest('base64'))" "$tgz")"
+          echo "expected $expected"
+          echo "actual   $actual"
+          if [ -z "$expected" ] || [ "$actual" != "$expected" ]; then
+            echo "::error::tarball integrity mismatch: registry says '$expected', got '$actual'"
+            exit 1
+          fi
+
+          # Registry signature, and provenance when the release carries it.
+          # A throwaway project; the package has no dependencies and
+          # --ignore-scripts means no install script could run anyway.
+          sig="$RUNNER_TEMP/mcp-vault-sig"
+          rm -rf "$sig" && mkdir -p "$sig"
+          ( cd "$sig"
+            npm init -y > /dev/null
+            npm install "$PKG@$VERSION" --save-exact --ignore-scripts --no-audit --no-fund --silent
+            locked="$(node -p "require('./package-lock.json').packages['node_modules/$PKG'].integrity")"
+            [ "$locked" = "$expected" ] || { echo "::error::installed integrity $locked != $expected"; exit 1; }
+            npm audit signatures | tee "$sig/audit.txt" )
+          if [ -n "$attest" ]; then
+            provenance="attested ($attest)"
+            grep -qi 'attestation' "$sig/audit.txt" || { echo "::error::release has attestations but npm audit signatures did not verify them"; exit 1; }
+          else
+            provenance="none (dist.attestations absent)"
+            if [ "$REQUIRE_PROVENANCE" = "true" ]; then
+              echo "::error::$PKG@$VERSION has no provenance attestation"
+              exit 1
+            fi
+            echo "::warning::$PKG@$VERSION has no npm provenance attestation; only the registry signature was verified"
+          fi
+
+          tar -xzf "$tgz" -C "$dir"
+          {
+            echo "dir=$dir/package"
+            echo "integrity=$actual"
+            echo "provenance=$provenance"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Generate
+        id: gen
+        env:
+          PKG_DIR: ${{ steps.pkg.outputs.dir }}
+        run: |
+          set -euo pipefail
+          cli="$PKG_DIR/bin/mcp-vault.cjs"
+          gen="$RUNNER_TEMP/site-gen"
+          rm -rf "$gen" && mkdir -p "$gen"
+          notes="$RUNNER_TEMP/gen-notes.md"
+          : > "$notes"
+
+          # Which commands this version has, from the top-level help.
+          node "$cli" --help > "$RUNNER_TEMP/help.txt"
+          has() { grep -qE "^  $1( |$)" "$RUNNER_TEMP/help.txt"; }
+          # Whether a command takes --out, from its own --help. Harmless on old
+          # versions too: 0.15.x `site-registry --help` ignores the flag and
+          # generates into the unpacked package under RUNNER_TEMP.
+          takes_out() { node "$cli" "$1" --help 2>&1 | grep -q -- '--out'; }
+
+          if ! has site-registry; then
+            echo "::notice::site-registry is not in this version; registry.* left as is"
+            echo "- \`site-registry\`: **skipped** (not in this version)" >> "$notes"
+          elif takes_out site-registry; then
+            # Next releases: one call writes registry.*, and with vault #119
+            # badges/ + entry/, with vault #126 v0.1/ (it runs `badge --write`
+            # and `export-registry` itself with the same flags).
+            node "$cli" site-registry --out "$gen" --base-url "$SITE_BASE_URL"
+            ( shopt -s nullglob dotglob; cd "$gen"; set -- *; echo "- \`site-registry --out\`: $*" ) >> "$notes"
+            for part in "badges:#119" "entry:#119" "v0.1:#126"; do
+              d="${part%%:*}"
+              if [ ! -d "$gen/$d" ]; then
+                echo "::notice::$d/ not produced by this version (vault ${part#*:} not in it); skipped"
+                echo "- $d/: **skipped** (vault ${part#*:} not in this version)" >> "$notes"
+              fi
+            done
+          else
+            # 0.15.x: no output flag, it writes <package>/docs/site. Only the two
+            # files are taken from there.
+            node "$cli" site-registry
+            for f in registry.html registry.json; do
+              [ -f "$PKG_DIR/docs/site/$f" ] || { echo "::error::site-registry did not write $f"; exit 1; }
+              cp "$PKG_DIR/docs/site/$f" "$gen/$f"
+            done
+            echo "- \`site-registry\` (no --out in this version): registry.html, registry.json" >> "$notes"
+            echo "::notice::site-registry has no --out in this version (vault #119/#126 not released); badges/, entry/, v0.1/ skipped"
+            echo "- badges/, entry/, v0.1/: **skipped** (vault #119/#126 not released)" >> "$notes"
+          fi
+
+          echo "gen=$gen" >> "$GITHUB_OUTPUT"
+
+      - name: Copy the generated set into the site
+        env:
+          GEN: ${{ steps.gen.outputs.gen }}
+        run: |
+          set -euo pipefail
+          notes="$RUNNER_TEMP/gen-notes.md"
+          for f in registry.html registry.json; do
+            if [ -f "$GEN/$f" ]; then cp "$GEN/$f" "$f"; fi
+          done
+          # Directories are mirrored, so a removed entry loses its badge/page.
+          for d in badges entry v0.1; do
+            if [ -d "$GEN/$d" ]; then
+              mkdir -p "$d"
+              rsync -a --delete "$GEN/$d/" "$d/"
+            fi
+          done
+          # Anything else a newer generator writes is not published until it is
+          # added to the allowlist here.
+          extra=""
+          shopt -s nullglob dotglob
+          for p in "$GEN"/*; do
+            case "${p##*/}" in
+              registry.html|registry.json|badges|entry|v0.1) ;;
+              *) extra="$extra${p##*/} " ;;
+            esac
+          done
+          shopt -u nullglob dotglob
+          if [ -n "$extra" ]; then
+            echo "::notice::generated but not published (not in the allowlist): $extra"
+            echo "- not published (outside the allowlist): \`$extra\`" >> "$notes"
+          fi
+
+          # registry.json carries generated_at; a new timestamp alone is not a change.
+          if ! git diff --quiet -- registry.json; then
+            if node -e '
+              const { execFileSync } = require("child_process");
+              const strip = (s) => { const j = JSON.parse(s); delete j.generated_at; return JSON.stringify(j); };
+              const old = execFileSync("git", ["show", "HEAD:registry.json"], { encoding: "utf8" });
+              const cur = require("fs").readFileSync("registry.json", "utf8");
+              process.exit(strip(old) === strip(cur) ? 0 : 1);
+            '; then
+              git checkout -- registry.json
+            fi
+          fi
+
+      - name: Check that only generated paths changed
+        id: diff
+        run: |
+          set -euo pipefail
+          git status --porcelain=v1 --untracked-files=all -z \
+            | tr '\0' '\n' | grep -v '^$' | cut -c4- > "$RUNNER_TEMP/changed.txt" || true
+          allowed='^(registry\.html|registry\.json|badges/.+|entry/.+|v0\.1/.+)$'
+          if grep -vE "$allowed" "$RUNNER_TEMP/changed.txt" > "$RUNNER_TEMP/forbidden.txt"; then
+            echo "::error::paths outside the generated set changed:"
+            cat "$RUNNER_TEMP/forbidden.txt"
+            exit 1
+          fi
+          n="$(wc -l < "$RUNNER_TEMP/changed.txt" | tr -d ' ')"
+          echo "count=$n" >> "$GITHUB_OUTPUT"
+          echo "$n path(s) changed"
+          head -n 50 "$RUNNER_TEMP/changed.txt"
+
+      - name: Commit and push
+        id: push
+        if: steps.diff.outputs.count != '0'
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # Exactly the paths the check above listed, additions and deletions alike.
+          tr '\n' '\0' < "$RUNNER_TEMP/changed.txt" | xargs -0 git add -A --
+          git commit -m "chore(site): build from mcp-vault $VERSION"
+          git push origin HEAD:main
+
+      - name: Summary
+        if: always()
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+          INTEGRITY: ${{ steps.pkg.outputs.integrity }}
+          PROVENANCE: ${{ steps.pkg.outputs.provenance }}
+          COUNT: ${{ steps.diff.outputs.count }}
+          PUSH: ${{ steps.push.outcome }}
+        run: |
+          {
+            echo "## build from $PKG ${VERSION:-?}"
+            echo
+            echo "- integrity: \`${INTEGRITY:-not verified}\`"
+            echo "- provenance: ${PROVENANCE:-not checked}"
+            echo
+            echo "### Generated"
+            cat "$RUNNER_TEMP/gen-notes.md" 2>/dev/null || echo "- (generation did not run)"
+            echo
+            case "${COUNT:-}" in
+              '') echo "Result: stopped before the diff check." ;;
+              0)  echo "Result: no changes, nothing committed." ;;
+              *)  if [ "$PUSH" = "success" ]; then echo "Result: $COUNT path(s) committed to main."
+                  else echo "Result: $COUNT path(s) changed, but the commit/push did not succeed ($PUSH)."; fi
+                  echo '```'; head -n 100 "$RUNNER_TEMP/changed.txt"; echo '```' ;;
+            esac
+          } >> "$GITHUB_STEP_SUMMARY"
