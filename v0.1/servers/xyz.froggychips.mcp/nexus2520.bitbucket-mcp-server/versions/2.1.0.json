@@ -1,0 +1,100 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/nexus2520.bitbucket-mcp-server",
+    "title": "@nexus2520/bitbucket-mcp-server",
+    "description": "vcs MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "2.1.0",
+    "repository": {
+      "url": "https://github.com/pdogra1299/bitbucket-mcp-server",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "@nexus2520/bitbucket-mcp-server",
+        "version": "2.1.0",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "@nexus2520/bitbucket-mcp-server",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (85/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "vcs",
+        "license": "MIT",
+        "health_score": 74.77,
+        "est_tools_count": null,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "@nexus2520/bitbucket-mcp-server",
+          "version": "2.1.0",
+          "integrity": "sha512-2Mm6MKtKxAmWEXru9GsNTEjMBA18zpTjRix+UOCvcHKnJML5tw2XqYmUi1r/m9OCu/h32GQpm/h/G4Zuwxmq7A==",
+          "artifact_id": "npm:@nexus2520/bitbucket-mcp-server@2.1.0"
+        },
+        "install_cmd": "npx -y @nexus2520/bitbucket-mcp-server@2.1.0",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "absent",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "fail",
+          "tools": null,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain @nexus2520/bitbucket-mcp-server",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

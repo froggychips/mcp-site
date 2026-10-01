@@ -1,0 +1,104 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/github-mcp-server",
+        "title": "github-mcp-server",
+        "description": "vcs MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "sha256-508a0857ec76",
+        "repository": {
+          "url": "https://github.com/github/github-mcp-server",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "oci",
+            "identifier": "ghcr.io/github/github-mcp-server@sha256:508a0857ec762b1ab1cece29193345b501fab1dd9d1228a7b617062954cecac6",
+            "runtimeHint": "docker",
+            "transport": {
+              "type": "stdio"
+            },
+            "runtimeArguments": [
+              {
+                "type": "named",
+                "name": "--cap-drop",
+                "value": "ALL"
+              },
+              {
+                "type": "named",
+                "name": "--security-opt",
+                "value": "no-new-privileges"
+              }
+            ],
+            "environmentVariables": [
+              {
+                "name": "GITHUB_PERSONAL_ACCESS_TOKEN",
+                "isRequired": true,
+                "isSecret": true
+              }
+            ]
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "github-mcp-server",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "warn",
+              "decided_by": "trust/thin",
+              "reason": "artifact: verified",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "will not start without credentials in the environment",
+            "tier_holds_until": "2026-11-01T00:00:00.000Z",
+            "trust": "verified",
+            "category": "vcs",
+            "license": "MIT",
+            "health_score": 75,
+            "est_tools_count": 100,
+            "pinned": {
+              "ecosystem": "oci",
+              "identifier": "ghcr.io/github/github-mcp-server@sha256:508a0857ec762b1ab1cece29193345b501fab1dd9d1228a7b617062954cecac6",
+              "version": null,
+              "integrity": "sha256-508a0857ec762b1ab1cece29193345b501fab1dd9d1228a7b617062954cecac6",
+              "artifact_id": "oci:ghcr.io/github/github-mcp-server@sha256:508a0857ec762b1ab1cece29193345b501fab1dd9d1228a7b617062954cecac6"
+            },
+            "install_cmd": "docker run -i --rm --cap-drop ALL --security-opt no-new-privileges -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server@sha256:508a0857ec762b1ab1cece29193345b501fab1dd9d1228a7b617062954cecac6",
+            "evidence": {
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain github-mcp-server",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

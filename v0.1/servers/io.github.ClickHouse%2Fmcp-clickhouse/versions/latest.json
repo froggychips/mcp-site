@@ -1,0 +1,92 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "io.github.ClickHouse/mcp-clickhouse",
+    "title": "mcp-clickhouse",
+    "description": "database MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "0.3.0",
+    "repository": {
+      "url": "https://github.com/ClickHouse/mcp-clickhouse",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "pypi",
+        "registryBaseUrl": "https://pypi.org",
+        "identifier": "mcp-clickhouse",
+        "version": "0.3.0",
+        "runtimeHint": "uvx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "mcp-clickhouse",
+        "name_source": "official-registry",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (70/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "database",
+        "license": "Apache-2.0",
+        "health_score": 80,
+        "est_tools_count": 4,
+        "pinned": {
+          "ecosystem": "pypi",
+          "identifier": "mcp-clickhouse",
+          "version": "0.3.0",
+          "integrity": "sha256-4c38d5f6bed6b99c030b0db386f987b220e5b49be9ab44c95d4a588fd74fad5d",
+          "artifact_id": "pypi:mcp-clickhouse@0.3.0"
+        },
+        "install_cmd": "uvx mcp-clickhouse==0.3.0",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "listed",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "pass",
+          "tools": 3,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain mcp-clickhouse",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

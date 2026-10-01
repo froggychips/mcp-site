@@ -1,0 +1,97 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/kafka-mcp-server",
+        "title": "kafka-mcp-server",
+        "description": "streaming MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "sha256-3ac9f77f8193",
+        "repository": {
+          "url": "https://github.com/tuannvm/kafka-mcp-server",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "oci",
+            "identifier": "ghcr.io/tuannvm/kafka-mcp-server@sha256:3ac9f77f81933b2be290fefc3d6e069f74751a4ac5c17ce1d0ab120f196ca9ac",
+            "runtimeHint": "docker",
+            "transport": {
+              "type": "stdio"
+            },
+            "runtimeArguments": [
+              {
+                "type": "named",
+                "name": "--cap-drop",
+                "value": "ALL"
+              },
+              {
+                "type": "named",
+                "name": "--security-opt",
+                "value": "no-new-privileges"
+              }
+            ]
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "kafka-mcp-server",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "warn",
+              "decided_by": "trust/thin",
+              "reason": "artifact: verified",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+            "tier_holds_until": "2026-11-01T00:00:00.000Z",
+            "trust": "verified",
+            "category": "streaming",
+            "license": "MIT",
+            "health_score": 37.56,
+            "est_tools_count": null,
+            "pinned": {
+              "ecosystem": "oci",
+              "identifier": "ghcr.io/tuannvm/kafka-mcp-server@sha256:3ac9f77f81933b2be290fefc3d6e069f74751a4ac5c17ce1d0ab120f196ca9ac",
+              "version": null,
+              "integrity": "sha256-3ac9f77f81933b2be290fefc3d6e069f74751a4ac5c17ce1d0ab120f196ca9ac",
+              "artifact_id": "oci:ghcr.io/tuannvm/kafka-mcp-server@sha256:3ac9f77f81933b2be290fefc3d6e069f74751a4ac5c17ce1d0ab120f196ca9ac"
+            },
+            "install_cmd": "docker run -i --rm --cap-drop ALL --security-opt no-new-privileges ghcr.io/tuannvm/kafka-mcp-server@sha256:3ac9f77f81933b2be290fefc3d6e069f74751a4ac5c17ce1d0ab120f196ca9ac",
+            "evidence": {
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain kafka-mcp-server",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

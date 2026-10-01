@@ -1,0 +1,107 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/fsb-mcp-server",
+        "title": "fsb-mcp-server",
+        "description": "browser MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "0.9.0",
+        "repository": {
+          "url": "https://github.com/lakshmanturlapati/FSB",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "fsb-mcp-server",
+            "version": "0.9.0",
+            "runtimeHint": "npx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "fsb-mcp-server",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "allow",
+              "decided_by": "trust/ok",
+              "reason": "artifact verified and nothing contradicts it (85/100)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "verified",
+            "category": "browser",
+            "license": "BUSL-1.1",
+            "health_score": 80,
+            "est_tools_count": null,
+            "pinned": {
+              "ecosystem": "npm",
+              "identifier": "fsb-mcp-server",
+              "version": "0.9.0",
+              "integrity": "sha512-w/+joT2EiNkf6ueeCkihViaqtWwVpQo2n1erJsNe6n9IHvVzIPDLjULPOrqTx9Kp17t35ksju7MJ52vHGj6Pvw==",
+              "artifact_id": "npm:fsb-mcp-server@0.9.0"
+            },
+            "install_cmd": "npx -y fsb-mcp-server@0.9.0",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "present",
+                "checked_at": "2026-10-01"
+              },
+              "provenance": {
+                "status": "absent",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "signature": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "pass",
+              "tools": 72,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain fsb-mcp-server",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

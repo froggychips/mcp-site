@@ -1,0 +1,107 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/sentry-mcp",
+        "title": "sentry-mcp",
+        "description": "observability MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "0.33.0",
+        "repository": {
+          "url": "https://github.com/getsentry/sentry-mcp",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "@sentry/mcp-server",
+            "version": "0.33.0",
+            "runtimeHint": "npx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "sentry-mcp",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "allow",
+              "decided_by": "trust/ok",
+              "reason": "artifact verified and nothing contradicts it (85/100)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "verified",
+            "category": "observability",
+            "license": "FSL-1.1-ALv2",
+            "health_score": 65,
+            "est_tools_count": 18,
+            "pinned": {
+              "ecosystem": "npm",
+              "identifier": "@sentry/mcp-server",
+              "version": "0.33.0",
+              "integrity": "sha512-vVxmGXjVoMT/VebmRf7lHlx9UexGrrVW8a7GbeoFTh1tHbNI25FmrcsB1qMLI7BCaXEriKmbVQRN5ZAeE2DviA==",
+              "artifact_id": "npm:@sentry/mcp-server@0.33.0"
+            },
+            "install_cmd": "npx -y @sentry/mcp-server@0.33.0",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "present",
+                "checked_at": "2026-10-01"
+              },
+              "provenance": {
+                "status": "absent",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "signature": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain sentry-mcp",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

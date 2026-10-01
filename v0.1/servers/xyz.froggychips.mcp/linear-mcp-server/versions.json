@@ -1,0 +1,107 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/linear-mcp-server",
+        "title": "linear-mcp-server",
+        "description": "pm MCP server, pinned and checked by mcp-vault (Experimental)",
+        "version": "0.1.0",
+        "repository": {
+          "url": "https://github.com/jerhadf/linear-mcp-server",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "linear-mcp-server",
+            "version": "0.1.0",
+            "runtimeHint": "npx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "linear-mcp-server",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "warn",
+              "decided_by": "finding/severity",
+              "reason": "source_binding: mismatch (observed 2026-10-01)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Experimental",
+            "tier_reason": "source_binding: mismatch (as of 2026-10-01)",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "unverified",
+            "category": "pm",
+            "license": "MIT",
+            "health_score": 40,
+            "est_tools_count": 5,
+            "pinned": {
+              "ecosystem": "npm",
+              "identifier": "linear-mcp-server",
+              "version": "0.1.0",
+              "integrity": "sha512-HNk4aB9VZzT/BYBYSe0NlbwTukJAp0PyreoQCqff+avNkaHllJq0hGuBO5W2Sk8zbBwwtj5E93b35/6gcvbp4A==",
+              "artifact_id": "npm:linear-mcp-server@0.1.0"
+            },
+            "install_cmd": "npx -y linear-mcp-server@0.1.0",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "present",
+                "checked_at": "2026-10-01"
+              },
+              "provenance": {
+                "status": "absent",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "signature": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "mismatch",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain linear-mcp-server",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

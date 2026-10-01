@@ -1,0 +1,99 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/duckduckgo-mcp-server",
+        "title": "duckduckgo-mcp-server",
+        "description": "search MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "0.4.0",
+        "repository": {
+          "url": "https://github.com/nickclyde/duckduckgo-mcp-server",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "pypi",
+            "registryBaseUrl": "https://pypi.org",
+            "identifier": "duckduckgo-mcp-server",
+            "version": "0.4.0",
+            "runtimeHint": "uvx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "duckduckgo-mcp-server",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "allow",
+              "decided_by": "trust/ok",
+              "reason": "artifact verified and nothing contradicts it (65/100)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "will not start without network access",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "verified",
+            "category": "search",
+            "license": "MIT",
+            "health_score": 80,
+            "est_tools_count": 2,
+            "pinned": {
+              "ecosystem": "pypi",
+              "identifier": "duckduckgo-mcp-server",
+              "version": "0.4.0",
+              "integrity": "sha256-4338b05321bcc8809aadd3b1db808e42ebe7736c5dfa74981770e7d8acf07455",
+              "artifact_id": "pypi:duckduckgo-mcp-server@0.4.0"
+            },
+            "install_cmd": "uvx duckduckgo-mcp-server==0.4.0",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "present",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain duckduckgo-mcp-server",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

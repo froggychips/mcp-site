@@ -1,0 +1,100 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/renseiai.agentfactory-mcp-server",
+    "title": "@renseiai/agentfactory-mcp-server",
+    "description": "utility MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "0.9.0",
+    "repository": {
+      "url": "https://github.com/RenseiAI/agentfactory",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "@renseiai/agentfactory-mcp-server",
+        "version": "0.9.0",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "@renseiai/agentfactory-mcp-server",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (95/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "utility",
+        "license": "MIT",
+        "health_score": 78.2,
+        "est_tools_count": null,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "@renseiai/agentfactory-mcp-server",
+          "version": "0.9.0",
+          "integrity": "sha512-k7koBni2uRTBHV19FxRd3EP3m6dSZcCyio+SulNN3HQ6GBVFdlVgXxHbg1RanMnwrnbaVbvAvRHe/fNI/b7kVw==",
+          "artifact_id": "npm:@renseiai/agentfactory-mcp-server@0.9.0"
+        },
+        "install_cmd": "npx -y @renseiai/agentfactory-mcp-server@0.9.0",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "deprecated",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "bound",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "fail",
+          "tools": null,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain @renseiai/agentfactory-mcp-server",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

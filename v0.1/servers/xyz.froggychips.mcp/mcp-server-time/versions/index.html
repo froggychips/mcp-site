@@ -1,0 +1,100 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/mcp-server-time",
+        "title": "mcp-server-time",
+        "description": "utility MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "2026.1.26",
+        "repository": {
+          "url": "https://github.com/modelcontextprotocol/servers",
+          "source": "github",
+          "subfolder": "src/time"
+        },
+        "packages": [
+          {
+            "registryType": "pypi",
+            "registryBaseUrl": "https://pypi.org",
+            "identifier": "mcp-server-time",
+            "version": "2026.1.26",
+            "runtimeHint": "uvx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "mcp-server-time",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "allow",
+              "decided_by": "trust/ok",
+              "reason": "artifact verified and nothing contradicts it (55/100)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "verified",
+            "category": "utility",
+            "license": "MIT",
+            "health_score": 75,
+            "est_tools_count": 2,
+            "pinned": {
+              "ecosystem": "pypi",
+              "identifier": "mcp-server-time",
+              "version": "2026.1.26",
+              "integrity": "sha256-fcef6991e8d8480ed7d9be8016cb853f8c697d146322d3e698f45b586d86f1c1",
+              "artifact_id": "pypi:mcp-server-time@2026.1.26"
+            },
+            "install_cmd": "uvx mcp-server-time==2026.1.26",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "present",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "unverified",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain mcp-server-time",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}
