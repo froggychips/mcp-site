@@ -1,0 +1,92 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/mcp-atlassian",
+    "title": "mcp-atlassian",
+    "description": "docs MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "0.22.0",
+    "repository": {
+      "url": "https://github.com/sooperset/mcp-atlassian",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "pypi",
+        "registryBaseUrl": "https://pypi.org",
+        "identifier": "mcp-atlassian",
+        "version": "0.22.0",
+        "runtimeHint": "uvx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "mcp-atlassian",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (55/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "docs",
+        "license": "MIT",
+        "health_score": 75,
+        "est_tools_count": 72,
+        "pinned": {
+          "ecosystem": "pypi",
+          "identifier": "mcp-atlassian",
+          "version": "0.22.0",
+          "integrity": "sha256-645522501661c04728cf9075aa3c3391f2073aec9335ea6844afd8dc078f0e3c",
+          "artifact_id": "pypi:mcp-atlassian@0.22.0"
+        },
+        "install_cmd": "uvx mcp-atlassian==0.22.0",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "unverified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "pass",
+          "tools": 0,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain mcp-atlassian",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

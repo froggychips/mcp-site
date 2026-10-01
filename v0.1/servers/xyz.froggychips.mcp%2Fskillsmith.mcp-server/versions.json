@@ -1,0 +1,107 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/skillsmith.mcp-server",
+        "title": "@skillsmith/mcp-server",
+        "description": "utility MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "0.5.1",
+        "repository": {
+          "url": "https://github.com/smith-horn/skillsmith",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "@skillsmith/mcp-server",
+            "version": "0.5.1",
+            "runtimeHint": "npx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "@skillsmith/mcp-server",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "allow",
+              "decided_by": "trust/ok",
+              "reason": "artifact verified and nothing contradicts it (85/100)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 137)",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "verified",
+            "category": "utility",
+            "license": "Elastic-2.0",
+            "health_score": 68.92,
+            "est_tools_count": null,
+            "pinned": {
+              "ecosystem": "npm",
+              "identifier": "@skillsmith/mcp-server",
+              "version": "0.5.1",
+              "integrity": "sha512-MRtsEuPWqG7MIYlrWFKUDCNGJh5MNQ07PKSK0kO/pBupz5W2M9L2Pkfsn3r0YPddTzDHJmlrJDtRY1k8aKwdtQ==",
+              "artifact_id": "npm:@skillsmith/mcp-server@0.5.1"
+            },
+            "install_cmd": "npx -y @skillsmith/mcp-server@0.5.1",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "present",
+                "checked_at": "2026-10-01"
+              },
+              "provenance": {
+                "status": "absent",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "signature": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain @skillsmith/mcp-server",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

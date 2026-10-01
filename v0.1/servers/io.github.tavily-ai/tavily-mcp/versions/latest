@@ -1,0 +1,100 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "io.github.tavily-ai/tavily-mcp",
+    "title": "tavily-mcp",
+    "description": "search MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "0.2.19",
+    "repository": {
+      "url": "https://github.com/tavily-ai/tavily-mcp",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "tavily-mcp",
+        "version": "0.2.19",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "tavily-mcp",
+        "name_source": "official-registry",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (90/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "search",
+        "license": "MIT",
+        "health_score": 75,
+        "est_tools_count": 2,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "tavily-mcp",
+          "version": "0.2.19",
+          "integrity": "sha512-mn6koWMQJRhtDFZ6kjW/knD23gBjPufNKNxbPMqe/bbSOkvnlVQgJjg54fkqt7WA9UtVPcmSx/XbcgS7/diDDQ==",
+          "artifact_id": "npm:tavily-mcp@0.2.19"
+        },
+        "install_cmd": "npx -y tavily-mcp@0.2.19",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "absent",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "listed",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "pass",
+          "tools": 5,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain tavily-mcp",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

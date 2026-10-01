@@ -1,0 +1,100 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/exa-mcp-server",
+    "title": "exa-mcp-server",
+    "description": "search MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "3.2.1",
+    "repository": {
+      "url": "https://github.com/exa-labs/exa-mcp-server",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "exa-mcp-server",
+        "version": "3.2.1",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "exa-mcp-server",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (85/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "search",
+        "license": "MIT",
+        "health_score": 75,
+        "est_tools_count": 5,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "exa-mcp-server",
+          "version": "3.2.1",
+          "integrity": "sha512-JUcqdfvOh/szKM8iZk//Bm2De4eDiNOud3tZqHSOBK8EgMKJQoXRcLKzWzHLroTwVEfxGL1aB9UdFUiXibV/5A==",
+          "artifact_id": "npm:exa-mcp-server@3.2.1"
+        },
+        "install_cmd": "npx -y exa-mcp-server@3.2.1",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "absent",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "pass",
+          "tools": 2,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain exa-mcp-server",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

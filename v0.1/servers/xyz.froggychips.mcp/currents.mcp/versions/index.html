@@ -1,0 +1,107 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/currents.mcp",
+        "title": "@currents/mcp",
+        "description": "utility MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "2.2.18",
+        "repository": {
+          "url": "https://github.com/currents-dev/currents-mcp",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "@currents/mcp",
+            "version": "2.2.18",
+            "runtimeHint": "npx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "@currents/mcp",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "allow",
+              "decided_by": "trust/ok",
+              "reason": "artifact verified and nothing contradicts it (100/100)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "verified",
+            "category": "utility",
+            "license": "Apache-2.0",
+            "health_score": 73.22,
+            "est_tools_count": null,
+            "pinned": {
+              "ecosystem": "npm",
+              "identifier": "@currents/mcp",
+              "version": "2.2.18",
+              "integrity": "sha512-7jyKyzc1m+RNL9nkTbqMV4qrFlz/M7RUn4nOUUKZ+VhUNp0AB8oXKAPz7aC9S5DUdBFy2wP22Adk3Lqsh5jHsg==",
+              "artifact_id": "npm:@currents/mcp@2.2.18"
+            },
+            "install_cmd": "npx -y @currents/mcp@2.2.18",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "present",
+                "checked_at": "2026-10-01"
+              },
+              "provenance": {
+                "status": "bound",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "signature": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "fail",
+              "tools": null,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain @currents/mcp",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

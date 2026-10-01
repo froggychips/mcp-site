@@ -1,0 +1,97 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/terraform-mcp-server",
+        "title": "terraform-mcp-server",
+        "description": "infra MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "sha256-423a6b8e2ee0",
+        "repository": {
+          "url": "https://github.com/hashicorp/terraform-mcp-server",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "oci",
+            "identifier": "docker.io/hashicorp/terraform-mcp-server@sha256:423a6b8e2ee06affcf090892f40c86469caba45fd2448ffa8ca5d717a174f7d5",
+            "runtimeHint": "docker",
+            "transport": {
+              "type": "stdio"
+            },
+            "runtimeArguments": [
+              {
+                "type": "named",
+                "name": "--cap-drop",
+                "value": "ALL"
+              },
+              {
+                "type": "named",
+                "name": "--security-opt",
+                "value": "no-new-privileges"
+              }
+            ]
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "terraform-mcp-server",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "warn",
+              "decided_by": "trust/thin",
+              "reason": "artifact: verified",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+            "tier_holds_until": "2026-11-01T00:00:00.000Z",
+            "trust": "verified",
+            "category": "infra",
+            "license": "MPL-2.0",
+            "health_score": 75,
+            "est_tools_count": null,
+            "pinned": {
+              "ecosystem": "oci",
+              "identifier": "docker.io/hashicorp/terraform-mcp-server@sha256:423a6b8e2ee06affcf090892f40c86469caba45fd2448ffa8ca5d717a174f7d5",
+              "version": null,
+              "integrity": "sha256-423a6b8e2ee06affcf090892f40c86469caba45fd2448ffa8ca5d717a174f7d5",
+              "artifact_id": "oci:hashicorp/terraform-mcp-server@sha256:423a6b8e2ee06affcf090892f40c86469caba45fd2448ffa8ca5d717a174f7d5"
+            },
+            "install_cmd": "docker run -i --rm --cap-drop ALL --security-opt no-new-privileges hashicorp/terraform-mcp-server@sha256:423a6b8e2ee06affcf090892f40c86469caba45fd2448ffa8ca5d717a174f7d5",
+            "evidence": {
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "pass",
+              "tools": 9,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain terraform-mcp-server",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

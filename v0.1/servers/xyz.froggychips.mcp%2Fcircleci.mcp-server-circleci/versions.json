@@ -1,0 +1,107 @@
+{
+  "servers": [
+    {
+      "server": {
+        "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+        "name": "xyz.froggychips.mcp/circleci.mcp-server-circleci",
+        "title": "@circleci/mcp-server-circleci",
+        "description": "ci-cd MCP server, pinned and checked by mcp-vault (Recommended)",
+        "version": "0.15.1",
+        "repository": {
+          "url": "https://github.com/CircleCI-Public/mcp-server-circleci",
+          "source": "github"
+        },
+        "packages": [
+          {
+            "registryType": "npm",
+            "registryBaseUrl": "https://registry.npmjs.org",
+            "identifier": "@circleci/mcp-server-circleci",
+            "version": "0.15.1",
+            "runtimeHint": "npx",
+            "transport": {
+              "type": "stdio"
+            }
+          }
+        ],
+        "_meta": {
+          "xyz.froggychips.mcp/vault": {
+            "vault_name": "@circleci/mcp-server-circleci",
+            "name_source": "vault",
+            "as_of": "2026-10-01T12:52:51.012Z",
+            "verdict": {
+              "effect": "allow",
+              "decided_by": "trust/ok",
+              "reason": "artifact verified and nothing contradicts it (80/100)",
+              "as_of": "2026-10-01T12:52:51.012Z"
+            },
+            "tier": "Recommended",
+            "tier_reason": "a run started and listed tools, but it did not record which artifact it launched",
+            "tier_holds_until": "2026-10-09T00:00:00.000Z",
+            "trust": "verified",
+            "category": "ci-cd",
+            "license": "NOASSERTION",
+            "health_score": 69.73,
+            "est_tools_count": null,
+            "pinned": {
+              "ecosystem": "npm",
+              "identifier": "@circleci/mcp-server-circleci",
+              "version": "0.15.1",
+              "integrity": "sha512-Bwmk+Cr4SwEjiQRPqxVkB/Inf7spbDKBZXix9nINAXmWf6p52CMx7fH2xVlsZpaLWyqQhNRR+UhnmczouG6lZw==",
+              "artifact_id": "npm:@circleci/mcp-server-circleci@0.15.1"
+            },
+            "install_cmd": "npx -y @circleci/mcp-server-circleci@0.15.1",
+            "evidence": {
+              "advisories": {
+                "status": "clean",
+                "checked_at": "2026-10-01"
+              },
+              "artifact": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "availability": {
+                "status": "deprecated",
+                "checked_at": "2026-10-01"
+              },
+              "provenance": {
+                "status": "absent",
+                "checked_at": "2026-10-01"
+              },
+              "registry": {
+                "status": "unlisted",
+                "checked_at": "2026-10-01"
+              },
+              "signature": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              },
+              "source_binding": {
+                "status": "verified",
+                "checked_at": "2026-10-01"
+              }
+            },
+            "smoke": {
+              "status": "pass",
+              "tools": 13,
+              "checked_at": "2026-09-17"
+            },
+            "explain": {
+              "command": "npx -y @froggychips/mcp-vault explain @circleci/mcp-server-circleci",
+              "page": "https://mcp.froggychips.xyz/registry.html",
+              "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+            }
+          }
+        }
+      },
+      "_meta": {
+        "xyz.froggychips.mcp/vault": {
+          "isLatest": true,
+          "as_of": "2026-10-01T12:52:51.012Z"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "count": 1
+  }
+}

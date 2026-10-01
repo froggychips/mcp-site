@@ -1,0 +1,100 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/dynatrace-oss.dynatrace-mcp-server",
+    "title": "@dynatrace-oss/dynatrace-mcp-server",
+    "description": "observability MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "2.1.1",
+    "repository": {
+      "url": "https://github.com/dynatrace-oss/dynatrace-mcp",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "@dynatrace-oss/dynatrace-mcp-server",
+        "version": "2.1.1",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "@dynatrace-oss/dynatrace-mcp-server",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (95/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "observability",
+        "license": "MIT",
+        "health_score": 60,
+        "est_tools_count": null,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "@dynatrace-oss/dynatrace-mcp-server",
+          "version": "2.1.1",
+          "integrity": "sha512-6V0Ux/HD18ZFmEoMCWRdgt+oSL34V8VXjwjVY4CTb9BlvfsLgMzEYWv805TGnAA82Ud+gscGCcl1/cR8p+vkOQ==",
+          "artifact_id": "npm:@dynatrace-oss/dynatrace-mcp-server@2.1.1"
+        },
+        "install_cmd": "npx -y @dynatrace-oss/dynatrace-mcp-server@2.1.1",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "deprecated",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "bound",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "fail",
+          "tools": null,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain @dynatrace-oss/dynatrace-mcp-server",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

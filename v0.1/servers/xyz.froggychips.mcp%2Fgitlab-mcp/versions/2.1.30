@@ -1,0 +1,100 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/gitlab-mcp",
+    "title": "gitlab-mcp",
+    "description": "vcs MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "2.1.30",
+    "repository": {
+      "url": "https://github.com/zereight/gitlab-mcp",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "@zereight/mcp-gitlab",
+        "version": "2.1.30",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "gitlab-mcp",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (100/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "vcs",
+        "license": "MIT",
+        "health_score": 80,
+        "est_tools_count": 153,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "@zereight/mcp-gitlab",
+          "version": "2.1.30",
+          "integrity": "sha512-DSLZ0oJWsr/FOg5UZevT27YHKn3woKeyGYyPFGsue3qeJPTf+BeGcZAcPvAy8A5o/smk52C3n9hpN0QzwU8a/g==",
+          "artifact_id": "npm:@zereight/mcp-gitlab@2.1.30"
+        },
+        "install_cmd": "npx -y @zereight/mcp-gitlab@2.1.30",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "bound",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "fail",
+          "tools": null,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain gitlab-mcp",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

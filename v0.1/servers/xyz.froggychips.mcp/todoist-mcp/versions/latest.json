@@ -1,0 +1,100 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/todoist-mcp",
+    "title": "todoist-mcp",
+    "description": "pm MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "1.3.4",
+    "repository": {
+      "url": "https://github.com/stanislavlysenko0912/todoist-mcp-server",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "todoist-mcp",
+        "version": "1.3.4",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "todoist-mcp",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (85/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "pm",
+        "license": "MIT",
+        "health_score": 48.06,
+        "est_tools_count": null,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "todoist-mcp",
+          "version": "1.3.4",
+          "integrity": "sha512-S5anBdEUEvfhNGT3jiirwRA6g0nmioIirkk1R4GsgY+/jNYN5Bvu1udt2tQ01DNk9Ms2EuBJvXxWUYk5iEugTQ==",
+          "artifact_id": "npm:todoist-mcp@1.3.4"
+        },
+        "install_cmd": "npx -y todoist-mcp@1.3.4",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "absent",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "fail",
+          "tools": null,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain todoist-mcp",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}

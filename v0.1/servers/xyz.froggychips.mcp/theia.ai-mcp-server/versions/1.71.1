@@ -1,0 +1,104 @@
+{
+  "server": {
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "xyz.froggychips.mcp/theia.ai-mcp-server",
+    "title": "@theia/ai-mcp-server",
+    "description": "utility MCP server, pinned and checked by mcp-vault (Recommended)",
+    "version": "1.71.1",
+    "repository": {
+      "url": "https://github.com/eclipse-theia/theia",
+      "source": "github"
+    },
+    "packages": [
+      {
+        "registryType": "npm",
+        "registryBaseUrl": "https://registry.npmjs.org",
+        "identifier": "@theia/ai-mcp-server",
+        "version": "1.71.1",
+        "runtimeHint": "npx",
+        "transport": {
+          "type": "stdio"
+        }
+      }
+    ],
+    "_meta": {
+      "xyz.froggychips.mcp/vault": {
+        "vault_name": "@theia/ai-mcp-server",
+        "name_source": "vault",
+        "as_of": "2026-10-01T12:52:51.012Z",
+        "verdict": {
+          "effect": "allow",
+          "decided_by": "trust/ok",
+          "reason": "artifact verified and nothing contradicts it (95/100)",
+          "as_of": "2026-10-01T12:52:51.012Z"
+        },
+        "tier": "Recommended",
+        "tier_reason": "did not complete a handshake in a clean sandbox (CRASH, exit 1)",
+        "tier_holds_until": "2026-10-09T00:00:00.000Z",
+        "trust": "verified",
+        "category": "utility",
+        "license": "EPL-2.0",
+        "health_score": 75,
+        "est_tools_count": null,
+        "pinned": {
+          "ecosystem": "npm",
+          "identifier": "@theia/ai-mcp-server",
+          "version": "1.71.1",
+          "integrity": "sha512-2dcbtKbHAh/6UdoY492yl07QRTgS7m/La7E3jQz7Hr2OcXMwfvRDMPBHIOgTRxzZoGvWOl0L7QTtge0x4lX/0g==",
+          "artifact_id": "npm:@theia/ai-mcp-server@1.71.1"
+        },
+        "install_cmd": "npx -y @theia/ai-mcp-server@1.71.1",
+        "evidence": {
+          "advisories": {
+            "status": "clean",
+            "checked_at": "2026-10-01"
+          },
+          "artifact": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "availability": {
+            "status": "present",
+            "checked_at": "2026-10-01"
+          },
+          "provenance": {
+            "status": "bound",
+            "checked_at": "2026-10-01"
+          },
+          "registry": {
+            "status": "unlisted",
+            "checked_at": "2026-10-01"
+          },
+          "repository_posture": {
+            "status": "weak",
+            "checked_at": "2026-10-01"
+          },
+          "signature": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          },
+          "source_binding": {
+            "status": "verified",
+            "checked_at": "2026-10-01"
+          }
+        },
+        "smoke": {
+          "status": "fail",
+          "tools": null,
+          "checked_at": "2026-09-17"
+        },
+        "explain": {
+          "command": "npx -y @froggychips/mcp-vault explain @theia/ai-mcp-server",
+          "page": "https://mcp.froggychips.xyz/registry.html",
+          "source": "https://github.com/froggychips/mcp-skills-vault/blob/master/mcp-ecosystem-intelligence/assets/tools_database.json"
+        }
+      }
+    }
+  },
+  "_meta": {
+    "xyz.froggychips.mcp/vault": {
+      "isLatest": true,
+      "as_of": "2026-10-01T12:52:51.012Z"
+    }
+  }
+}
