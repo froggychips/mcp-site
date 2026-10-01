@@ -3,244 +3,160 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>mcp-skills-vault — install MCP safely</title>
-  <meta name="description" content="Deterministic registry + supply-chain integrity scanner for Model Context Protocol servers. Hash-pinned 114-entry DB, 4 advisory feeds, offline audit, token-cost guidance. npx -y @froggychips/mcp-vault.">
+  <title>mcp-vault CLI — MCP config scanner and supply-chain gate</title>
+  <meta name="description" content="mcp-vault CLI: check a repo's MCP configs in one pass, see what your machine runs with status, then verify, explain and lock. Offline, zero deps.">
   <link rel="canonical" href="https://mcp.froggychips.xyz/vault.html">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="froggychips">
+  <meta property="og:site_name" content="mcp-vault">
   <meta property="og:url" content="https://mcp.froggychips.xyz/vault.html">
-  <meta property="og:title" content="mcp-skills-vault — make MCP supply chain boring">
-  <meta property="og:description" content="Hash-pinned 114-entry MCP server registry. 4 advisory feeds before install. Offline-first audit. One line: npx -y @froggychips/mcp-vault scan.">
+  <meta property="og:title" content="mcp-vault CLI — MCP config scanner and supply-chain gate">
+  <meta property="og:description" content="check for a repository, status for your machine, then verify, explain, upgrade and lock. Offline by default, zero dependencies, no telemetry.">
   <meta property="og:image" content="https://mcp.froggychips.xyz/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="mcp-vault: offline security check for MCP configs">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="mcp-skills-vault — make MCP supply chain boring">
-  <meta name="twitter:description" content="Hash-pinned 114-entry MCP server registry. 4 advisory feeds before install. Offline-first audit. One line: npx -y @froggychips/mcp-vault scan.">
+  <meta name="twitter:title" content="mcp-vault CLI — MCP config scanner and supply-chain gate">
+  <meta name="twitter:description" content="check for a repository, status for your machine, then verify, explain, upgrade and lock. Offline by default, zero dependencies, no telemetry.">
   <meta name="twitter:image" content="https://mcp.froggychips.xyz/og-image.png">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "mcp-skills-vault",
-    "alternateName": "@froggychips/mcp-vault",
-    "applicationCategory": "DeveloperApplication",
-    "applicationSubCategory": "SecurityApplication",
-    "operatingSystem": "macOS, Linux, Windows",
-    "description": "Deterministic registry + supply-chain integrity scanner for Model Context Protocol (MCP) servers. Hash-pinned 114-entry DB with 94 hand-verified entries, sha512/sha256/Docker @sha256 integrity, 4 advisory feeds (npm bulk + OSV.dev + GHSA + Snyk), offline-first audit, token-cost guidance, license-drift detection.",
-    "url": "https://mcp.froggychips.xyz/vault.html",
-    "downloadUrl": "https://www.npmjs.com/package/@froggychips/mcp-vault",
-    "softwareVersion": "0.12.0",
-    "license": "https://opensource.org/licenses/MIT",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "author": { "@type": "Organization", "name": "froggychips", "url": "https://github.com/froggychips" }
-  }
-  </script>
+  <meta name="twitter:image:alt" content="mcp-vault: offline security check for MCP configs">
 </head>
 <body>
   <header>
-    <nav>
+    <nav aria-label="Site">
       <a href="/">home</a>
-      <a href="/vault.html">vault</a>
+      <a href="/install.html">install</a>
+      <a href="/vault.html" aria-current="page">cli</a>
       <a href="/registry.html">registry</a>
       <a href="/trace.html">trace</a>
-      <a href="/install.html">install</a>
-      <a href="https://github.com/froggychips">github</a>
+      <a href="https://github.com/froggychips/mcp-skills-vault">github</a>
     </nav>
   </header>
 
   <main>
-    <h1>mcp-skills-vault</h1>
+    <h1>mcp-vault CLI</h1>
     <p class="lede">
-      A deterministic registry + integrity scanner for MCP servers,
-      so installing one stops feeling like <code>curl | bash</code>.
-      Sister project to <a href="/trace.html">mcp-trace</a>.
+      The command line behind the <a href="/install.html">GitHub Action and pre-commit hook</a>:
+      an MCP config scanner for repositories, and a supply-chain gate for the
+      Model Context Protocol servers on your own machine. Package
+      <code>@froggychips/mcp-vault</code>, repository
+      <a href="https://github.com/froggychips/mcp-skills-vault">mcp-skills-vault</a>.
     </p>
 
-    <h2>Install</h2>
-    <pre><code># One-line — no clone, no global install
-npx -y @froggychips/mcp-vault scan --cwd ./my-project    # what to install for this stack
-npx -y @froggychips/mcp-vault list                       # all 114 servers in the DB
-npx -y @froggychips/mcp-vault audit --strict             # diff installed vs DB
-npx -y @froggychips/mcp-vault verify --offline           # true offline DB-pin gate
-npx -y @froggychips/mcp-vault doctor                     # local readiness check
+    <h2>In a repository: <code>check</code></h2>
+    <pre><code># The MCP configs this repository commits, one pass, one exit code.
+# Offline: no network call, nothing from your home directory.
+npx -y @froggychips/mcp-vault check
+
+# Stricter, or for a pipeline:
+npx -y @froggychips/mcp-vault check --strict            # warnings fail too
+npx -y @froggychips/mcp-vault check --sarif &gt; mcp.sarif  # each finding on its config line</code></pre>
+    <p>
+      With no paths it reads <code>.mcp.json</code> (Claude Code),
+      <code>.vscode/mcp.json</code> (VS Code) and <code>.cursor/mcp.json</code>
+      (Cursor). In one decision it looks at pins and hashes of known packages,
+      stored advisories, launches with no exact version, overridden package
+      sources, lookalike names (typosquatting), plain-text secrets (the value is
+      never printed), what the servers of one config can do together, and stored
+      tool-description scans (tool poisoning). Exit <code>0</code> clean,
+      <code>1</code> something fails, <code>2</code> a config, the policy or the
+      arguments could not be read. This is what the
+      <a href="/install.html#action">Action</a> and the
+      <a href="/install.html#pre-commit">pre-commit hook</a> run.
+    </p>
+
+    <h2>On your machine: <code>status</code></h2>
+    <pre><code># One command. No network calls: every claim comes from evidence
+# already on disk, and the report says so rather than implying
+# it was checked just now.
+npx -y @froggychips/mcp-vault status
+
+# Then, when you want a live answer or more detail:
+npx -y @froggychips/mcp-vault verify --installed          # re-hash what your hosts launch
+npx -y @froggychips/mcp-vault explain &lt;name&gt;             # why one entry is allowed or denied
+npx -y @froggychips/mcp-vault scan --cwd ./my-project     # what to install for this stack
+npx -y @froggychips/mcp-vault audit --strict              # every drift and scope finding
 
 # Prefer it on PATH? Drop the npx prefix after this.
-npm i -g @froggychips/mcp-vault
+npm i -g @froggychips/mcp-vault</code></pre>
+    <p>
+      <code>status</code> reads the host configs on this machine &mdash; Claude Code,
+      Claude Desktop, Cursor, VS Code, Codex &mdash; so its answer depends on whose
+      machine runs it; <code>check</code> reads only the files in the repository.
+      Servers are matched by artifact identity, not by the name in your config, and
+      the version is compared separately: evidence about <code>x@1.0.0</code> is not
+      a finding about <code>x@2.0.0</code> in either direction.
+    </p>
 
-# As a Claude Code skill (optional)
-git clone https://github.com/froggychips/mcp-skills-vault.git
-mkdir -p ~/.claude/skills
-cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
+    <p>Zero runtime dependencies. Node 18 or newer, built-ins only. No telemetry.</p>
 
-    <p>Zero runtime dependencies. Node built-ins only. One JSON file is the entire database.</p>
+    <h2>Policy for a team or an organisation</h2>
+    <p>
+      <code>.mcp-vault.policy.json</code> sets the bar once, so CI and your shell
+      enforce the same one: unpinned-launch handling, signature and provenance
+      requirements, licence allow/deny, acceptable tiers. An organisation keeps one
+      policy and projects inherit it with <code>"extends"</code>: an allow-list means
+      default deny, a deny rule outranks every allow, and a project can only tighten
+      the organisation&rsquo;s rules. An unknown key is an error, not a no-op.
+    </p>
 
-    <h2>What you get</h2>
+    <h2>Beyond the configs</h2>
     <ul>
-      <li><strong>Curated DB</strong> &mdash; 114 entries across 26 categories, all with pinned versions and SPDX licenses. 20 Core / 71 Recommended / 23 Experimental. <code>trust</code> is <em>derived from dated evidence</em> rather than typed by hand: 101 verified, 1 candidate, 12 unverified &mdash; the 12 being eight entries with an advisory against the pinned version, two whose repository disagrees with the registry&rsquo;s, one yanked and one unpublished.</li>
-      <li><strong>Browse it</strong> &mdash; <code>mcp-vault list</code> shows every entry with name / category / tier / trust / install command. Filters: <code>--category</code>, <code>--tier</code>, <code>--trust</code>, <code>--query</code>. <code>--json</code> for scripts.</li>
-      <li><strong>Supply-chain gate that fails closed</strong> &mdash; sha512 (npm), sha256 (PyPI) and <code>@sha256:</code> (Docker) pins, re-verified against the live registry, with 4 advisory feeds merged (npm bulk + OSV.dev + GHSA + Snyk) before the install command is written. Anything it <em>could not</em> check reports <code>UNVERIFIED</code> rather than passing: a feed being down is not evidence that a pin is good.</li>
-      <li><strong>Hash the bytes yourself</strong> &mdash; <code>--deep</code> downloads each artifact and hashes it locally instead of comparing the pin against metadata served by the same host as the tarball. npm&rsquo;s registry signature over <code>name@version:integrity</code> is verified on every run (100 of 102 npm entries today), and provenance attestations are read and compared with the recorded source repository.</li>
-      <li><strong>The whole dependency tree</strong> &mdash; <code>--deps</code> resolves it with <code>npm install --package-lock-only --ignore-scripts</code> (nothing installed, no package code run) and checks every package in it. Across the DB that is 19,377 transitive packages, 25 entries whose <em>dependencies</em> run install scripts, and 38 with a high or critical advisory somewhere in the tree.</li>
-      <li><strong>What actually gets written</strong> &mdash; <code>install</code> writes the version the gate verified (<code>pkg@1.2.3</code>, <code>pkg==1.2.3</code>, <code>image@sha256:&hellip;</code>), and refuses an unpinned command. <code>npx -y pkg</code> resolves <code>latest</code> at every start, which is not the artifact anyone reviewed. <code>--host</code> targets Claude Code, Claude Desktop, Cursor, VS Code, or prints a TOML block for Codex.</li>
-      <li><strong>Check what your hosts really launch</strong> &mdash; <code>mcp-vault verify --installed</code> reads the configs themselves instead of the DB, and reports unpinned commands, servers that are not in the vault, local binaries and remote endpoints as what they are.</li>
-      <li><strong>Trust as dated evidence</strong> &mdash; each dimension (artifact, signature, provenance, source binding, advisories, dependencies, smoke) carries its own status and the date it was established, with its own shelf life: a hash match holds for 90 days, &ldquo;no advisories&rdquo; for 7. <code>trust</code> is derived from that, and dropped when the version moves.</li>
-      <li><strong>One policy file, not seven flags</strong> &mdash; <code>.mcp-vault.policy.json</code> sets the bar once (unverified handling, signature and provenance requirements, licence allow/deny, minimum health, acceptable trust tiers) so CI and your shell enforce the same one. An unknown key is an error, not a no-op.</li>
-      <li><strong>Behavioural smoke</strong> &mdash; <code>mcp-vault eval --sandbox</code> spawns a server jailed in an ephemeral container, runs the <code>initialize</code> &rarr; <code>tools/list</code> handshake, counts tools and lints each schema. A <code>docker run</code> entry is rebuilt from its pinned digest under the jail&rsquo;s own flags, because the entry&rsquo;s flags come from a file a pull request can edit. The hash proves you got the file; this proves the file starts.</li>
-      <li><strong>Context budget</strong> &mdash; <code>mcp-vault budget</code> totals what your configured servers inject into every request, stating for each number whether it was measured from a real <code>tools/list</code> payload or estimated from a tool count.</li>
-      <li><strong>Machine-readable</strong> &mdash; <code>--json</code> for every command, and <code>verify --sarif</code> so each finding lands on the <code>tools_database.json</code> line that caused it in GitHub code scanning.</li>
-      <li><strong>Audit installed setup</strong> &mdash; <code>mcp-vault audit</code> diffs your installed servers against the DB and flags drift, untrusted entries, heavy-unbounded servers, and scope issues.</li>
-      <li><strong>Doctor</strong> &mdash; <code>mcp-vault doctor</code> checks Node, <code>gh</code>, Docker, <code>uvx</code>, and Claude MCP config readiness without printing token values.</li>
-      <li><strong>Is it still published?</strong> &mdash; <code>mcp-vault availability</code> tells <em>gone</em>, <em>version-gone</em>, <em>yanked</em> and <em>deprecated</em> apart, because a 404 and a network failure arrive on the same code path and both used to read as &ldquo;could not check&rdquo;. One entry in this DB had been unpublished from npm while still marked verified &mdash; and an unpublished name is not a broken link, it is a name somebody else can register.</li>
-      <li><strong>Who published it</strong> &mdash; cross-referenced with the <a href="https://registry.modelcontextprotocol.io">official MCP registry</a>, whose namespaces are ownership-verified at publish time (<code>io.github.&lt;owner&gt;/&hellip;</code> requires authenticating as that account). Nothing else here is proved in that sense: npm&rsquo;s <code>repository.url</code> is typed by the publisher and a vault entry&rsquo;s source URL is typed by a pull request. Not a competing registry &mdash; a security overlay over one.</li>
-      <li><strong>What the package can do, and what it gained</strong> &mdash; <code>mcp-vault capabilities</code> reads the published tarball in memory and records each capability with a file and a line. Across the 99 npm entries it can read: 84 read <code>process.env</code>, 74 reach the network, 35 can run other programs, 31 run install scripts, 15 evaluate code built at runtime. Then it diffs against the previous version, because a patch release that <em>starts</em> shelling out is what a compromised release looks like before it has a CVE.</li>
-      <li><strong>Did the tools change?</strong> &mdash; every passing behavioural run fingerprints the tool surface per tool (name, description and input schema hashed separately, hashes only). It also records the identity of what ran, so a later run can say which of three things happened: the surface changed with a new artifact (an upgrade), changed <em>without</em> one (<strong>unexplained</strong> &mdash; the case worth looking at), or cannot be attributed because nothing recorded an identity to compare. &ldquo;Unexplained&rdquo; is not &ldquo;impossible&rdquo;: an unvendored launch re-resolves its dependency tree at every start, and flags, credentials and a remote backend can each change what a server advertises.</li>
-      <li><strong>So what do I install instead?</strong> &mdash; <code>mcp-vault upgrade</code> computes the shortest version that clears every advisory against a pin, not the newest release, and queries the candidate too &mdash; &ldquo;fixed in 2.1.30&rdquo; means fixed for <em>that</em> advisory. All eight affected entries in this DB have a safe path today.</li>
-      <li><strong>Why was it denied?</strong> &mdash; <code>mcp-vault explain &lt;name&gt;</code> prints every dimension with the date it was established and whether that date is still inside its shelf life, the policy in force, each rule with its outcome, and the rule that decided it. <code>--record</code> appends the decision as one JSON line, which is the audit trail a policy engine gets asked for six months later.</li>
-      <li><strong>Freeze what actually runs</strong> &mdash; the gate verifies a package and its tree, then <code>npx -y pkg@1.2.3</code> re-resolves that tree at every start: a pinned root does not pin its dependencies. <code>mcp-vault lock</code> records npm&rsquo;s own lockfile per server, <code>--check</code> diffs a fresh resolve against it, and <code>--vendor</code> installs the locked tree so nothing resolves at launch.</li>
-      <li><strong>Upstream repository posture</strong> &mdash; OpenSSF Scorecard read through deps.dev: branch protection, code review, dangerous workflow triggers, token permissions, pinned actions, signed releases. Recorded as individual checks rather than Scorecard&rsquo;s 0&ndash;10 average, and its &ldquo;could not run this check&rdquo; is recorded as <em>unknown</em>, never as a failure. Coverage is stated rather than implied: 4 of 114 repositories have a report.</li>
-      <li><strong>SBOM</strong> &mdash; <code>mcp-vault sbom</code> emits CycloneDX 1.6 (validated against the official schema), carrying what this tool knows and CycloneDX has no field for: the trust tier, each evidence dimension with its date, which dimensions have aged out, the behavioural status, and for transitive packages whether they run code at install time.</li>
+      <li><strong>Hash the bytes yourself</strong> &mdash; <code>verify --deep</code> downloads each artifact and hashes it locally; npm registry signatures are checked on every run, provenance attestations are read and compared with the recorded source repository.</li>
+      <li><strong>The whole dependency tree</strong> &mdash; <code>verify --deps</code> resolves it without installing anything and checks every package, including install scripts deep in the tree.</li>
+      <li><strong>Why was it denied?</strong> &mdash; <code>explain &lt;name&gt;</code> prints each piece of evidence with its date, the policy in force, every rule with its outcome, and the rule that decided it. <code>--record</code> keeps the decision as an audit line.</li>
+      <li><strong>What do I install instead?</strong> &mdash; <code>upgrade</code> finds the shortest version that clears every advisory against a pin, not the newest release.</li>
+      <li><strong>Freeze what actually runs</strong> &mdash; a pinned root does not pin its tree. <code>lock</code> records npm&rsquo;s lockfile per server, <code>--check</code> diffs a fresh resolve, <code>--vendor</code> installs it so nothing resolves at launch.</li>
+      <li><strong>What the tools tell the model</strong> &mdash; <code>tool-scan</code> reads a <code>tools/list</code> payload for hidden Unicode, terminal escapes, injected instructions and credential paths.</li>
+      <li><strong>Secrets on this machine</strong> &mdash; <code>secrets</code> runs the same secret scanning over every host config the tool reads, with a suggested fix in each host&rsquo;s own syntax.</li>
+      <li><strong>Machine-readable</strong> &mdash; <code>--json</code> everywhere, SARIF for code scanning, CycloneDX 1.6 from <code>sbom</code>.</li>
+      <li><strong>Also</strong> &mdash; <code>budget</code> (context tokens your servers inject), <code>capabilities</code> (what a package can do, and what a new version gained), <code>availability</code>, <code>identity</code>, <code>posture</code>, <code>doctor</code>. <code>mcp-vault --help</code> lists them all.</li>
     </ul>
 
-    <h2>What this does NOT do</h2>
+    <h2>For known servers: the curated database</h2>
+    <p>
+      The vault ships a database of known MCP servers with pinned versions,
+      integrity hashes (npm sha512, PyPI sha256, Docker <code>@sha256</code>) and
+      SPDX licences. Trust is derived from dated evidence, each kind with its own
+      shelf life &mdash; a hash match holds for 90 days, &ldquo;no advisories&rdquo; for 7 &mdash;
+      rather than typed by hand. As of 2026-09-30 (the newest evidence in the
+      database): 112 entries, 107 verified, 1 candidate, 4 unverified. It is
+      what <code>check</code> compares a known server against; it is not a
+      list of everything you may run.
+    </p>
+    <p><a class="cta ghost" href="/registry.html">Browse the registry &rarr;</a></p>
+
+    <h2>What this does not do</h2>
     <ul>
-      <li><strong>Not a sandbox.</strong> Installing an MCP server still runs that server with the permissions of your MCP host.</li>
-      <li><strong>Not a runtime monitor.</strong> Vault is an install-time gate; use <a href="/trace.html">mcp-trace</a> or another monitor for runtime behaviour.</li>
-      <li><strong>Not proof that a server is benign.</strong> Hashes prove you got the artifact you expected, not that the artifact is safe.</li>
-      <li><strong>Provenance is bound, not cryptographically verified.</strong> <code>bound</code> means npm&rsquo;s own registry signing key &mdash; the same key <code>dist.signatures</code> is checked against &mdash; signed a DSSE statement whose subject digest is the artifact we verified, and a certificate claims the recorded repository built it. The DSSE signature <em>is</em> checked, so swapping the digest in an attestation document does not pass. What is still not done: the Fulcio certificate chain is not validated and the Rekor inclusion proof is not checked, which is why the <em>identity</em> half stays a claim about a repository &mdash; anybody can mint a certificate with any name in it. That asymmetry is the reason the digest half has to rest on npm&rsquo;s key, and the word &ldquo;verified&rdquo; never appears next to provenance.</li>
-      <li><strong>A capability scan shows presence, never absence.</strong> Eighteen of the ninety-nine readable packages ship at least one minified file; obfuscated code, a dynamic <code>require</code> and a string built at runtime all defeat a pattern scan. So a capability <em>found</em> is a fact with a file and a line, a capability not found is recorded as nothing at all, and a capability that stops matching between versions is reported as &ldquo;may be a change in behaviour, or only in readability&rdquo; rather than as an improvement.</li>
-      <li><strong>Behaviour is measured in a clean container, which is not your machine.</strong> 40 of 113 entries complete a handshake there; the rest crash, time out, or want credentials and network they are not given. That caps a recommendation rather than condemning a server: &ldquo;needs credentials&rdquo; is a setup step, &ldquo;never started&rdquo; is a reason to look before installing.</li>
+      <li><strong>Not a sandbox.</strong> An installed MCP server still runs with the permissions of your MCP host.</li>
+      <li><strong>Not a runtime monitor.</strong> The vault decides before a server runs; it does not watch it afterwards.</li>
+      <li><strong>Not proof that a server is benign.</strong> A hash proves you got the artifact you expected, not that the artifact is safe.</li>
+      <li><strong>Provenance is bound, not cryptographically verified.</strong> The attestation&rsquo;s digest is tied to npm&rsquo;s signing key; the Fulcio certificate chain and the Rekor inclusion proof are not checked, so the repository identity stays a claim.</li>
+      <li><strong>A pattern scan shows presence, never absence.</strong> Minified or obfuscated code defeats it, so a capability not found is recorded as nothing at all.</li>
     </ul>
 
-    <h2>Latest release</h2>
+    <h2>Releases</h2>
     <div class="release">
-      <p><strong>v0.14.1</strong> &mdash; 2026-09-18</p>
-      <ul>
-        <li><strong>A rule about a check that never ran is <code>unknown</code>, not a denial.</strong> Found by installing 0.14.0 from npm and using it: <code>explain &lt;name&gt;</code> without <code>--verify</code> refused an entry on &ldquo;no verifiable registry signature&rdquo; while that entry&rsquo;s stored evidence said the signature <em>was</em> verified &mdash; and the same command with <code>--verify</code> did not refuse. The policy evaluator decides from the <em>absence of a finding</em>, which is right after a scan and wrong when no scan ran; it was being handed an empty list. Gate-dependent rules are now answered from the evidence, with a third outcome that never blocks and is printed separately, so &ldquo;allowed&rdquo; and &ldquo;allowed as far as anyone has looked&rdquo; stop reading alike.</li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.14.1">Full release notes &rarr;</a></p>
+      <p><strong>v0.16.0</strong> &mdash; adds <code>mcp-vault check</code>, the GitHub Action and the pre-commit hook: one offline pass over a repository&rsquo;s MCP configs with one decision and one exit code.</p>
+      <p><a href="https://github.com/froggychips/mcp-skills-vault/blob/master/CHANGELOG.md">Changelog &rarr;</a></p>
     </div>
-
-    <div class="release">
-      <p><strong>v0.14.0</strong> &mdash; 2026-09-17</p>
-      <ul>
-        <li><strong>Trust stopped being a word somebody typed.</strong> The evidence model is filled for the whole database: eight dimensions, each with the date it was established and its own shelf life, and <code>trust</code> computed from them &mdash; 101 verified, 1 candidate, 12 unverified. The 12 are specific: eight advisories against a pinned version, two repositories that disagree with the registry&rsquo;s, one yanked release, one unpublished package.</li>
-        <li><strong>One of four advisory feeds had never worked.</strong> npm&rsquo;s bulk endpoint was being sent an array containing an empty string as the version, under a comment claiming npm tolerates it. It answers HTTP 400. Fixed, and it now asks about the pinned version, which is what the endpoint is for.</li>
-        <li><strong>Provenance is bound to the artifact</strong> &mdash; the attestation&rsquo;s subject digest is compared with the integrity value the registry signed, and the signing certificate&rsquo;s identity with the recorded repository. 45 entries reach that state. What is still unchecked is stated in the output rather than implied away.</li>
-        <li><strong>Behaviour decides whether something is recommended.</strong> The eval has recorded whether a server completes a handshake all along &mdash; 40 of 113 do &mdash; and nothing read it at the point a recommendation was printed. &ldquo;Never started&rdquo; now caps a verdict, &ldquo;needs credentials&rdquo; reads as a setup step, and both say why.</li>
-        <li><strong>New checks:</strong> <code>availability</code> (gone / yanked / deprecated / relocated), <code>identity</code> (the official registry&rsquo;s ownership-verified namespace), <code>capabilities</code> (what a package can do, with the version-to-version delta), <code>posture</code> (OpenSSF Scorecard for the upstream repo), <code>upgrade</code> (the shortest version clearing an advisory), <code>explain</code> (the decision, the evidence and the rule that made it), <code>lock</code> (freeze the tree; <code>--vendor</code> so nothing resolves at launch) and <code>sbom</code> (CycloneDX 1.6).</li>
-        <li><strong>Tool-surface fingerprints</strong> &mdash; 1,021 tools across 40 servers, hashed per tool, so a renamed tool or a rewritten description is visible. A change is attributed to a new artifact, reported as unexplained, or declared not attributable &mdash; the third answer being the one a string comparison could not give.</li>
-        <li><strong>The documented numbers are tested against the data.</strong> Fifteen claims on the README, checked on every run &mdash; the tier distribution had read 20/76/18 for a database holding 20/71/23.</li>
-        <li><strong>Published without a provenance attestation,</strong> which for this project is worth saying out loud rather than burying. npm only accepts provenance from GitHub-hosted runners; this account's runners are self-hosted because hosted ones will not start, so the release workflow&rsquo;s own rule &mdash; refuse to publish unprovenanced &mdash; had to be overridden explicitly for this version. The registry signature over <code>name@version:integrity</code> is present as usual. Provenance returns in the next release.</li>
-        <li><strong>Twenty-one defects found by review before release,</strong> most of them the same shape: a comparison that looked like a proof. The attestation&rsquo;s subject digest was read out of an unauthenticated document; a hand-written tar parser could be made to loop forever by an archive declaring a negative size; every PEP 440 suffix <em>combination</em> ordered wrongly, which for an upgrade planner means naming a version that is still vulnerable; <code>--vendor</code> re-resolved the tree it was supposed to be installing. CodeQL, newly enabled, added five more on its first run.</li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.14.0">Full release notes &rarr;</a></p>
-    </div>
-
-    <div class="release">
-      <p><strong>v0.13.0</strong> &mdash; 2026-09-17</p>
-      <ul>
-        <li>The gate fails closed: anything it could not check &mdash; registry unreachable, no stored hash, an install command it cannot parse &mdash; reports <code>UNVERIFIED</code> instead of passing quietly.</li>
-        <li><code>--deep</code> hashes the artifact locally; npm registry signatures verified on every run; <code>--deps</code> resolves the whole dependency tree without installing it.</li>
-        <li><code>verify --installed</code>, <code>budget</code>, <code>install --host</code> for Cursor / VS Code / Claude Desktop / Codex, and <code>--json</code> + <code>--sarif</code> everywhere.</li>
-        <li>CI stopped running pull-request code unprotected on the machine that holds everything, and the sandbox no longer trusts flags that come from the database.</li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.13.0">Full release notes &rarr;</a></p>
-    </div>
-
-    <div class="release">
-      <p><strong>v0.12.0</strong> &mdash; 2026-06-20</p>
-      <ul>
-        <li>Sandboxed PR-time behavioural smoke &mdash; <code>mcp-vault eval --sandbox</code> runs each changed server jailed in an ephemeral container; default-deny spawn policy; <code>failure_class</code> taxonomy (NEEDS_ENV / NEEDS_NET / TIMEOUT / NO_TOOLS / CRASH).</li>
-        <li>Shared zero-dep <code>mcp_stdio.cjs</code> wire core, vendored in common with <a href="/trace.html">mcp-trace</a> (#64).</li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.12.0">Full release notes &rarr;</a></p>
-    </div>
-
-    <div class="release">
-      <p><strong>v0.11.0</strong> &mdash; 2026-06-20</p>
-      <ul>
-        <li>Promoted <code>@anyproto/anytype-mcp</code> + <code>touchdesigner-mcp-server</code> from the discovery inbox &mdash; DB now 114 entries (#62).</li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.11.0">Full release notes &rarr;</a></p>
-    </div>
-
-    <div class="release">
-      <p><strong>v0.10.0</strong> &mdash; 2026-05-24</p>
-      <ul>
-        <li><code>mcp-vault doctor</code> &mdash; local readiness checks for Node, <code>gh</code>, Docker, <code>uvx</code>, project MCP config, and global Claude config without printing token values.</li>
-        <li><code>mcp-vault verify --offline</code> &mdash; true network-free DB-pin gate. <code>--no-audit</code> now means &ldquo;skip advisory APIs&rdquo;, not offline.</li>
-        <li><code>mcp-vault site-registry</code> &mdash; generate a browsable public registry page and adjacent <code>registry.json</code> from <code>tools_database.json</code>.</li>
-      </ul>
-      <p><a href="https://github.com/froggychips/mcp-skills-vault/releases/tag/v0.10.0">Full release notes &rarr;</a></p>
-    </div>
-
-    <h2>Quick taste</h2>
-    <pre><code>$ npx -y @froggychips/mcp-vault scan
-Stack: Langs: Node | DB: postgres | Infra: aws, teamcity, atlassian
-Needs: database, infra, ci-cd, pm
-
-── Recommended ──────────────────────────────────────────────
-  Core         mcp-server-neon            10 tools  score 105
-  Core         mcp-server-aws             20 tools  score 105
-  Core         mcp-server-filesystem      10 tools  score 105
-  Recommended  teamcity-mcp              null tools  score  65
-
-── Heavy — scope before global install ──────────────────────
-  Experimental mcp-atlassian             72 tools ⚠  score  55
-                 --toolsets jira,confluence</code></pre>
-
-    <h2>JSON output snippets</h2>
-    <p>Every user-facing command has <code>--json</code> for scripts and Claude Code skills.</p>
-    <pre><code>$ mcp-vault scan --cwd ./project --json
-{
-  "stack": {
-    "langs": ["Python"],
-    "dbs": ["postgres", "redis"],
-    "infra": ["kubernetes", "teamcity", "atlassian"]
-  },
-  "recommended": [
-    { "name": "mcp-server-neon", "classification": "Core", "health_score": 105 },
-    { "name": "teamcity-mcp", "classification": "Recommended", "health_score": 65 }
-  ],
-  "heavy": [
-    { "name": "mcp-atlassian", "est_tools_count": 72 }
-  ]
-}</code></pre>
-
-    <pre><code>$ mcp-vault audit --json
-{
-  "counts": { "drift": 1, "untrusted": 0, "heavy-unbounded": 1 },
-  "findings": [
-    {
-      "category": "heavy-unbounded",
-      "server": "github",
-      "message": "100 tools and no --toolsets / allowedTools scope"
-    }
-  ]
-}</code></pre>
-
-    <h2>Browse the registry</h2>
-    <p>The public registry page is generated directly from <code>tools_database.json</code> and includes category, tier, trust, license, score, tool count, and install command.</p>
-    <p><a class="cta" href="/registry.html">Open registry &rarr;</a></p>
 
     <div class="links">
       <a href="https://www.npmjs.com/package/@froggychips/mcp-vault">npm</a> &middot;
       <a href="https://github.com/froggychips/mcp-skills-vault">GitHub</a> &middot;
-      <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/CHANGELOG.md">Changelog</a> &middot;
       <a href="https://github.com/froggychips/mcp-skills-vault/releases">Releases</a> &middot;
+      <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/SECURITY.md">Security</a> &middot;
       <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/LICENSE">License (MIT)</a>
     </div>
   </main>
 
   <footer>
     <p>
-      <a href="https://github.com/froggychips">github.com/froggychips</a>
+      <a href="https://github.com/froggychips/mcp-skills-vault">github.com/froggychips/mcp-skills-vault</a>
       &middot; MIT licensed &middot; &copy; 2026 froggychips
     </p>
   </footer>
