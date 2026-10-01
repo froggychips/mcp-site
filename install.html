@@ -76,7 +76,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
         with:
           persist-credentials: false
-      - uses: froggychips/mcp-skills-vault@&lt;full commit SHA&gt;             # v0.16.0
+      - uses: froggychips/mcp-skills-vault@449bac6f1f66f240f906d6ad25cc1da909169677 # v0.16.0
         with:
           paths: '**/.mcp.json **/.vscode/mcp.json **/.cursor/mcp.json'
           # sarif: true   # findings in code scanning; needs security-events: write</code></pre>
@@ -99,7 +99,7 @@ jobs:
     <pre><code># .pre-commit-config.yaml
 repos:
   - repo: https://github.com/froggychips/mcp-skills-vault
-    rev: &lt;full commit SHA&gt;   # v0.16.0 — `pre-commit autoupdate --freeze` writes it
+    rev: 449bac6f1f66f240f906d6ad25cc1da909169677   # v0.16.0 — `pre-commit autoupdate --freeze` writes it
     hooks:
       - id: mcp-vault
       # - id: mcp-vault
