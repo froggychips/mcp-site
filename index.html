@@ -3,94 +3,206 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>froggychips — tools for taming the MCP supply chain</title>
-  <meta name="description" content="mcp-skills-vault installs MCP servers safely. mcp-trace shows what they're actually doing. No cloud, no telemetry.">
+  <title>mcp-vault — Offline security check for MCP configs in CI</title>
+  <meta name="description" content="GitHub Action, pre-commit hook and CLI that flag unpinned MCP servers, plaintext secrets, typosquats, tool poisoning and toxic tool flows. Offline.">
   <link rel="canonical" href="https://mcp.froggychips.xyz/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="froggychips">
+  <meta property="og:site_name" content="mcp-vault">
   <meta property="og:url" content="https://mcp.froggychips.xyz/">
-  <meta property="og:title" content="Tools for taming the MCP supply chain">
-  <meta property="og:description" content="mcp-skills-vault installs MCP servers safely. mcp-trace shows what they're actually doing. Offline-first. No telemetry.">
+  <meta property="og:title" content="mcp-vault — Offline security check for MCP configs in CI">
+  <meta property="og:description" content="A GitHub Action, pre-commit hook and CLI that flag unpinned MCP servers, plaintext secrets, typosquats, tool poisoning and toxic tool flows — offline, zero dependencies, no telemetry.">
   <meta property="og:image" content="https://mcp.froggychips.xyz/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="mcp-vault: offline security check for MCP configs">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Tools for taming the MCP supply chain">
-  <meta name="twitter:description" content="mcp-skills-vault installs MCP servers safely. mcp-trace shows what they're actually doing. Offline-first. No telemetry.">
+  <meta name="twitter:title" content="mcp-vault — Offline security check for MCP configs in CI">
+  <meta name="twitter:description" content="A GitHub Action, pre-commit hook and CLI that flag unpinned MCP servers, plaintext secrets, typosquats, tool poisoning and toxic tool flows — offline.">
   <meta name="twitter:image" content="https://mcp.froggychips.xyz/og-image.png">
+  <meta name="twitter:image:alt" content="mcp-vault: offline security check for MCP configs">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "mcp-vault",
+    "alternateName": ["@froggychips/mcp-vault", "mcp-skills-vault"],
+    "description": "Offline security check for MCP configs in CI. A GitHub Action, pre-commit hook and CLI that flag unpinned MCP servers, plaintext secrets, typosquats, tool poisoning and toxic tool flows — offline, zero dependencies, no telemetry.",
+    "applicationCategory": "DeveloperApplication",
+    "applicationSubCategory": "SecurityApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "softwareVersion": "0.16.0",
+    "url": "https://mcp.froggychips.xyz/",
+    "downloadUrl": "https://www.npmjs.com/package/@froggychips/mcp-vault",
+    "codeRepository": "https://github.com/froggychips/mcp-skills-vault",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Organization", "name": "froggychips", "url": "https://github.com/froggychips" }
+  }
+  </script>
 </head>
 <body>
   <header>
-    <nav>
-      <a href="/">home</a>
-      <a href="/vault.html">vault</a>
+    <nav aria-label="Site">
+      <a href="/" aria-current="page">home</a>
+      <a href="/install.html">install</a>
+      <a href="/vault.html">cli</a>
       <a href="/registry.html">registry</a>
       <a href="/trace.html">trace</a>
-      <a href="/install.html">install</a>
-      <a href="https://github.com/froggychips">github</a>
+      <a href="https://github.com/froggychips/mcp-skills-vault">github</a>
     </nav>
   </header>
 
   <main>
-    <h1>Tools for taming the MCP supply chain.</h1>
+    <p class="eyebrow">mcp-vault 0.16.0 &middot; MCP security for your repository</p>
+    <h1>Offline security check for MCP configs in CI.</h1>
     <p class="lede">
-      Two small, offline-first tools for people who run
-      <a href="https://modelcontextprotocol.io">Model Context Protocol</a>
-      servers on their own machines and would like to know what those servers
-      are doing.
+      A GitHub Action, pre-commit hook and CLI that flag unpinned MCP servers,
+      plaintext secrets, typosquats, tool poisoning and toxic tool flows &mdash;
+      offline, zero dependencies, no telemetry.
     </p>
 
-    <section class="cards" aria-label="projects">
-      <article class="card">
-        <h3>mcp-skills-vault</h3>
-        <p>Install MCP safely.</p>
-        <p>Curated registry of 114 servers with pinned hashes, license info and advisory-feed checks before any install command is written &mdash; plus whether each one is still published, who published it under a name they proved they own, what it is able to do, and whether it has ever been seen to start.</p>
-        <a class="cta" href="/vault.html">Learn &rarr;</a>
-      </article>
+    <h2>Add it to CI</h2>
+    <p>
+      One workflow file. It checks the <a href="https://modelcontextprotocol.io">Model Context Protocol</a>
+      configs your repository commits &mdash; <code>.mcp.json</code> (Claude Code),
+      <code>.cursor/mcp.json</code> (Cursor), <code>.vscode/mcp.json</code> (VS Code) &mdash;
+      on every pull request, before anyone&rsquo;s editor launches them.
+    </p>
+    <pre><code># .github/workflows/mcp-vault.yml
+name: mcp-vault
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  mcp-vault:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: froggychips/mcp-skills-vault@&lt;full commit SHA&gt;             # v0.16.0</code></pre>
+    <p>
+      <strong>Pin the action by its full commit SHA, not by a tag.</strong>
+      The action runs its own checkout &mdash; the code at the commit your
+      <code>uses:</code> line names. Nothing is installed from npm and there is
+      no install script to run, so pinning the action by SHA pins the gate by
+      SHA. It makes no network call and reads no token unless you set
+      <code>offline: false</code>. Add <code>sarif: true</code> to put each
+      finding on the config line in GitHub code scanning.
+    </p>
+    <div class="cta-row">
+      <a class="cta" href="/install.html">Install: Action, pre-commit, CLI &rarr;</a>
+      <a class="cta ghost" href="https://github.com/froggychips/mcp-skills-vault/blob/master/docs/GITHUB_ACTION.md">Action docs &rarr;</a>
+    </div>
 
-      <article class="card">
-        <h3>mcp-trace</h3>
-        <p>See what it&rsquo;s doing.</p>
-        <p>Stdio MITM proxy that pairs JSON-RPC request/response by id and logs metadata to a local SQLite file. Bodies never captured by default.</p>
-        <a class="cta" href="/trace.html">Learn &rarr;</a>
-      </article>
+    <h2>What the MCP config scanner catches</h2>
+    <p class="muted">
+      Real output of <code>mcp-vault check --as-of 2026-10-01</code> on the test
+      fixtures in the repository, trimmed where it says <code>&hellip;</code>.
+      <code>!</code> is a warning (fails with <code>--strict</code>), <code>&#x2717;</code> fails the run.
+    </p>
+
+    <section class="catch" aria-labelledby="c-unpinned">
+      <h3 id="c-unpinned">Unpinned launches</h3>
+      <p><code>npx -y pkg@latest</code> runs whatever was published last, at every start &mdash; not the artifact anyone reviewed. A range or a missing version is the same problem. Where the vault knows the server, the fix names the version it verified.</p>
+      <pre><code>$ mcp-vault check tests/fixtures/action/bad
+tests/fixtures/action/bad/.mcp.json
+  &hellip;
+  :3 playwright-mcp
+    ! this config launches @playwright/mcp@latest, a tag rather than a version: whatever is latest at each start runs [config/unpinned-launch: warn; so pin/missing: unknown]
+      fix: pin it to the version the vault verified (playwright-mcp): "args": ["-y","@playwright/mcp@0.0.75"]</code></pre>
+    </section>
+
+    <section class="catch" aria-labelledby="c-secrets">
+      <h3 id="c-secrets">Secrets in plain text</h3>
+      <p>Secret scanning over <code>env</code>, <code>args</code>, <code>headers</code> and <code>url</code>: GitHub, AWS, Slack, OpenAI, Anthropic and Stripe tokens, PEM keys, database URLs with a password. The value is never printed &mdash; not in text, JSON or SARIF. A <code>${VAR}</code> reference is not a finding.</p>
+      <pre><code>$ mcp-vault check tests/fixtures/launch-shapes/npx-yes-flags.json
+  &hellip;
+  :8 db
+    &#x2717; postgresql connection string with a password in plain text at mcpServers.db.args[2] (13 chars, &hellip;); the file is tracked by git, so the value is in history [secrets/connection-string: deny, fails]
+      fix: move the value to the environment and reference it by name, in whatever syntax this host documents; it is in git history, so rotate it
+
+FAIL — 1 failing, 7 to look at · 5 servers in 1 config · fail on deny · offline</code></pre>
+    </section>
+
+    <section class="catch" aria-labelledby="c-typo">
+      <h3 id="c-typo">Typosquatting and swapped package sources</h3>
+      <p>A typosquat passes every registry check &mdash; it is a real package, just not the one you meant. Names are compared offline against every known server: doubled letters, homoglyphs, dropped or foreign npm scopes, added affixes. A launch from another registry or index is reported instead of being checked as if it came from the public one.</p>
+      <pre><code>$ mcp-vault check
+.mcp.json
+  :3 memmory
+    &hellip;
+    ! npm package @modelcontextprotocol/server-memmory is not in the vault but looks like mcp-server-memory (npm @modelcontextprotocol/server-memory) — a doubled letter: @modelcontextprotocol/server-memmory vs @modelcontextprotocol/server-memory. Likely an impersonation of mcp-server-memory. [lookalike/doubled-letter: warn]
+  :4 tool
+    ! this config launches some-pkg from a source other than the public registry: installs from another registry (--registry). [config/launch-source-override: unknown; so verify/unverified: unknown]</code></pre>
+    </section>
+
+    <section class="catch" aria-labelledby="c-poison">
+      <h3 id="c-poison">Tool poisoning and toxic tool flows</h3>
+      <p>A tool description is an instruction the model follows on every request. <code>tool-scan</code> reads it for hidden Unicode, injected instructions and credential paths, and <code>check</code> applies the stored scans. It also looks at what the servers of one config do <em>together</em>: untrusted content, private data and an outward channel in one session is how data leaves.</p>
+      <pre><code>$ mcp-vault check tests/fixtures/launch-shapes/npx-yes-flags.json
+  (the config as a whole)
+    ! untrusted content + private data + outward sink across browser, context, fs [flows/lethal-trifecta: warn]
+      fix: keep browser, context and fs in separate profiles (different project configs or hosts), or drop the outward tools of browser
+
+$ mcp-vault tool-scan tools.json --server calc     # a sample tools/list payload
+calc  1 tools, 9 strings — 3 high, 1 medium, 1 low
+  HIGH   conceal-from-user        add: description — tells the model to keep something from the user
+  HIGH   injection-markup         add: description — prompt-control markup (&lt;IMPORTANT&gt;, &lt;SYSTEM&gt;, [INST], &lt;|im_start|&gt;)
+  HIGH   credential-path          add: description — names a credential or MCP-config path (~/.ssh, id_rsa, mcp.json, .aws/credentials)
+  &hellip;</code></pre>
     </section>
 
     <p>
-      No cloud. No telemetry. Same kind of tooling your CI would use,
-      packaged for your laptop.
+      The same pass also compares known packages with their pinned hashes, applies
+      stored advisories, and enforces your organisation&rsquo;s policy file &mdash;
+      allow-lists, denied capabilities, required evidence. One decision, one exit
+      code: <code>0</code> clean, <code>1</code> something fails, <code>2</code> a
+      config or the policy could not be read.
     </p>
 
+    <h2>How it behaves</h2>
+    <ul>
+      <li><strong>Fails closed</strong> &mdash; what it could not check is reported as <em>unknown</em>, never as a pass. A feed being down is not evidence that a pin is good.</li>
+      <li><strong>Offline by default</strong> &mdash; same commit, same answer, on every run. <code>--online</code> adds live registry and advisory checks.</li>
+      <li><strong>Zero dependencies</strong> &mdash; Node built-ins only, so its own supply chain is Node&rsquo;s.</li>
+      <li><strong>No telemetry</strong> &mdash; none, ever. This site has no analytics either.</li>
+    </ul>
+
+    <h2>For known servers</h2>
+    <p>
+      A curated database of known MCP servers is a bonus on top of the check:
+      when a config launches one of them, the vault compares the hash, version and
+      advisories against evidence recorded with a date. Browse it in the
+      <a href="/registry.html">registry</a>. The same build renders a README badge
+      and an evidence page per entry, and exports the database as a static
+      sub-registry of the official MCP Registry (API <code>v0.1</code>), so a host
+      that speaks that API can point at this site.
+    </p>
     <div class="cta-row">
-      <a class="cta" href="/install.html">Install both &rarr;</a>
-      <a class="cta ghost" href="https://github.com/froggychips">GitHub &rarr;</a>
+      <a class="cta ghost" href="/registry.html">Open the registry &rarr;</a>
+      <a class="cta ghost" href="/vault.html">CLI reference &rarr;</a>
     </div>
 
-    <h2>Why these two together</h2>
-    <ul>
-      <li><strong>Vault</strong> answers <em>what to install</em> &mdash; integrity-pinned commands, before <code>npx -y</code> runs.</li>
-      <li><strong>Trace</strong> answers <em>what it&rsquo;s doing</em> &mdash; once installed, which tools actually get called, how long they take, and what they cost in tokens.</li>
-      <li>Neither sends anything off your machine by default. Advisory feeds and registry calls are additive; the local gate has a true offline mode.</li>
-    </ul>
-
-    <h2>Five constraints</h2>
-    <p>Both projects share the same shape:</p>
-    <ul>
-      <li><strong>Offline-first</strong> &mdash; the gate you care about runs with no network.</li>
-      <li><strong>Minimal</strong> &mdash; zero runtime deps; Node built-ins only.</li>
-      <li><strong>Inspectable</strong> &mdash; every output has <code>--json</code>; every entry has an audit trail.</li>
-      <li><strong>Deterministic</strong> &mdash; same input, same output, every run.</li>
-      <li><strong>Boring</strong> &mdash; supply-chain tooling should not be exciting.</li>
-    </ul>
+    <h2>Sister project</h2>
+    <section class="cards" aria-label="Sister project">
+      <article class="card">
+        <h3>mcp-trace <span class="tag">experimental</span></h3>
+        <p>A stdio proxy that logs MCP JSON-RPC metadata &mdash; method, tool, latency, errors &mdash; to a local SQLite file. Version 0.1, installed from git.</p>
+        <a href="/trace.html">Status and install &rarr;</a>
+      </article>
+    </section>
   </main>
 
   <footer>
     <p>
-      <a href="https://github.com/froggychips">github.com/froggychips</a>
+      <a href="https://github.com/froggychips/mcp-skills-vault">github.com/froggychips/mcp-skills-vault</a>
+      &middot; <a href="https://www.npmjs.com/package/@froggychips/mcp-vault">npm</a>
       &middot; MIT licensed &middot; &copy; 2026 froggychips
     </p>
   </footer>

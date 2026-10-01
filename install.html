@@ -3,54 +3,126 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Install — mcp-skills-vault + mcp-trace in 5 minutes</title>
-  <meta name="description" content="End-to-end walkthrough: one-line npx install of mcp-skills-vault, scan a project, install mcp-trace, wrap a server, see token spend.">
+  <title>Install mcp-vault — GitHub Action, pre-commit or CLI</title>
+  <meta name="description" content="Three ways to run the MCP security check: a GitHub Action pinned by SHA, a pre-commit hook, or the CLI with npx. Offline, no token, no telemetry.">
   <link rel="canonical" href="https://mcp.froggychips.xyz/install.html">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="froggychips">
+  <meta property="og:site_name" content="mcp-vault">
   <meta property="og:url" content="https://mcp.froggychips.xyz/install.html">
-  <meta property="og:title" content="Install mcp-skills-vault + mcp-trace in 5 minutes">
-  <meta property="og:description" content="One-line npx install, scan your project, wrap a server with trace. End-to-end walkthrough. Offline-first.">
+  <meta property="og:title" content="Install mcp-vault — GitHub Action, pre-commit or CLI">
+  <meta property="og:description" content="Run the MCP config check in CI with a SHA-pinned GitHub Action, before each commit with pre-commit, or locally with npx. Offline by default.">
   <meta property="og:image" content="https://mcp.froggychips.xyz/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="mcp-vault: offline security check for MCP configs">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Install mcp-skills-vault + mcp-trace in 5 minutes">
-  <meta name="twitter:description" content="One-line npx install, scan your project, wrap a server with trace.">
+  <meta name="twitter:title" content="Install mcp-vault — GitHub Action, pre-commit or CLI">
+  <meta name="twitter:description" content="Run the MCP config check in CI with a SHA-pinned GitHub Action, before each commit with pre-commit, or locally with npx. Offline by default.">
   <meta name="twitter:image" content="https://mcp.froggychips.xyz/og-image.png">
+  <meta name="twitter:image:alt" content="mcp-vault: offline security check for MCP configs">
 </head>
 <body>
   <header>
-    <nav>
+    <nav aria-label="Site">
       <a href="/">home</a>
-      <a href="/vault.html">vault</a>
+      <a href="/install.html" aria-current="page">install</a>
+      <a href="/vault.html">cli</a>
       <a href="/registry.html">registry</a>
       <a href="/trace.html">trace</a>
-      <a href="/install.html">install</a>
-      <a href="https://github.com/froggychips">github</a>
+      <a href="https://github.com/froggychips/mcp-skills-vault">github</a>
     </nav>
   </header>
 
   <main>
-    <h1>Install both tools in 5 minutes</h1>
+    <h1>Install mcp-vault</h1>
     <p class="lede">
-      End-to-end walkthrough. No build step, no package manager, no cloud
-      account. Every command runs locally.
+      Three ways to run the same check: in CI, before each commit, or on your
+      laptop. All three are offline by default &mdash; no network call, no token,
+      no telemetry &mdash; and all three read the same MCP configs:
+      <code>.mcp.json</code> (Claude Code), <code>.cursor/mcp.json</code> (Cursor)
+      and <code>.vscode/mcp.json</code> (VS Code).
     </p>
 
-    <h2>0. Prerequisites</h2>
     <ul>
-      <li><strong>Node 22+</strong> &mdash; for built-in <code>node:sqlite</code>. Node 25+ recommended (flag-free).</li>
-      <li><strong>Claude Code</strong> &mdash; optional, only needed for the skill install path.</li>
-      <li><strong>gh CLI</strong> &mdash; optional, raises GHSA rate limits when present.</li>
+      <li><a href="#action">1. GitHub Action</a> &mdash; every pull request</li>
+      <li><a href="#pre-commit">2. pre-commit</a> &mdash; every commit</li>
+      <li><a href="#cli">3. CLI</a> &mdash; your repository and your machine</li>
     </ul>
 
+    <h2 id="action">1. GitHub Action (CI)</h2>
+    <pre><code># .github/workflows/mcp-vault.yml
+name: mcp-vault
+
+on:
+  pull_request:
+    paths:
+      - '**/.mcp.json'
+      - '**/.vscode/mcp.json'
+      - '**/.cursor/mcp.json'
+      - '.mcp-vault.policy.json'
+
+permissions:
+  contents: read
+
+jobs:
+  mcp-vault:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: froggychips/mcp-skills-vault@&lt;full commit SHA&gt;             # v0.16.0
+        with:
+          paths: '**/.mcp.json **/.vscode/mcp.json **/.cursor/mcp.json'
+          # sarif: true   # findings in code scanning; needs security-events: write</code></pre>
+    <p>
+      <strong>Why a SHA and not <code>@v0.16.0</code>:</strong> a tag can be moved,
+      a commit cannot. The action runs its own checkout, and the CLI has no
+      dependencies, so nothing is installed from npm and no install script runs
+      &mdash; pinning the action by SHA pins the gate by SHA. Keep the version in
+      the comment so Dependabot or Renovate can update both.
+    </p>
+    <p>
+      By default the job fails on anything that could not be checked (unpinned,
+      not in the vault, a local command); <code>fail-on: error</code> fails only on
+      a deny, <code>fail-on: warning</code> on warnings too. A policy file can raise
+      the bar, never lower it. Every input, output and the SARIF setup are in the
+      <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/docs/GITHUB_ACTION.md">Action docs</a>.
+    </p>
+
+    <h2 id="pre-commit">2. pre-commit</h2>
+    <pre><code># .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/froggychips/mcp-skills-vault
+    rev: &lt;full commit SHA&gt;   # v0.16.0 — `pre-commit autoupdate --freeze` writes it
+    hooks:
+      - id: mcp-vault
+      # - id: mcp-vault
+      #   args: [--strict]</code></pre>
+    <p>
+      Runs <code>mcp-vault check --fail-on unknown</code> on staged
+      <code>.mcp.json</code>, <code>.vscode/mcp.json</code> and
+      <code>.cursor/mcp.json</code>, offline. A plain-text secret is stopped before
+      it reaches git history, where it would have to be rotated.
+    </p>
+
+    <h2 id="cli">3. CLI, locally</h2>
+    <p>Node 18 or newer. No clone, no global install needed.</p>
+
     <section class="step">
-      <h3>1. Start here</h3>
+      <h3>Check this repository</h3>
+      <p>The same check the Action and the hook run, over the configs in the current directory. Nothing from your home directory is read.</p>
+      <pre><code>npx -y @froggychips/mcp-vault check
+npx -y @froggychips/mcp-vault check --strict    # warnings fail too</code></pre>
+    </section>
+
+    <section class="step">
+      <h3>Check your machine: start with <code>status</code></h3>
       <p>One command, about fifteen lines: what is installed, what is wrong with it, and what this project is missing. It makes no network calls &mdash; every claim comes from evidence already on disk, with the date it was established. Exit <code>1</code> means something installed must not run; exit <code>2</code> means a host config could not be read, so the report is incomplete and says which.</p>
       <pre><code>npx -y @froggychips/mcp-vault status</code></pre>
       <p>Servers are matched by <strong>artifact identity, not by the name in your config</strong>, and the version is compared separately: stored evidence about <code>x@1.0.0</code> is not a finding about <code>x@2.0.0</code> in either direction. A server on a version nobody verified gets no tier at all, and an unpinned <code>npx -y pkg</code> is reported as what it is.</p>
@@ -58,99 +130,31 @@
     </section>
 
     <section class="step">
-      <h3>2. Look closer where it pointed</h3>
-      <p><code>status</code> summarises; these answer in full. <code>verify --installed</code> re-hashes what your hosts actually launch, against the live registries. <code>explain &lt;name&gt;</code> prints one entry's evidence with dates, the policy in force, and the rule that decided it. <code>scan</code> reads the project's stack.</p>
+      <h3>Look closer where it pointed</h3>
+      <p><code>status</code> summarises; these answer in full. <code>verify --installed</code> re-hashes what your hosts actually launch, against the live registries. <code>explain &lt;name&gt;</code> prints one entry&rsquo;s evidence with dates, the policy in force, and the rule that decided it. <code>scan</code> reads the project&rsquo;s stack.</p>
       <pre><code>npx -y @froggychips/mcp-vault verify --installed
 npx -y @froggychips/mcp-vault explain mcp-server-fetch
 npx -y @froggychips/mcp-vault scan --cwd .</code></pre>
     </section>
 
     <section class="step">
-      <h3>3. Optional &mdash; install the vault as a Claude Code skill</h3>
-      <p>If you want Claude to call the vault by itself when you ask &ldquo;what MCP should I add?&rdquo;, drop the skill folder into your skills directory.</p>
-      <pre><code>git clone https://github.com/froggychips/mcp-skills-vault.git
-mkdir -p ~/.claude/skills
-cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
-    </section>
-
-    <section class="step">
-      <h3>4. Verify the vault DB offline</h3>
-      <p>Use this for air-gapped smoke checks. It validates stored pins only and makes no registry/advisory network calls.</p>
-      <pre><code>npx -y @froggychips/mcp-vault verify --offline</code></pre>
-    </section>
-
-    <section class="step">
-      <h3>5. Install mcp-trace</h3>
-      <p>Same shape: clone, verify version. Zero npm deps.</p>
-      <pre><code>git clone https://github.com/froggychips/mcp-trace.git
-cd mcp-trace
-node bin/mcp-trace.cjs --version</code></pre>
-    </section>
-
-    <section class="step">
-      <h3>6. Wrap an MCP server with trace</h3>
-      <p>Edit your project&rsquo;s <code>.mcp.json</code> (or <code>~/.claude.json</code>). Point <code>command</code> at <code>mcp-trace</code>, with the real server after <code>--</code>.</p>
-      <pre><code>{
-  "mcpServers": {
-    "github": {
-      "command": "node",
-      "args": [
-        "/abs/path/to/mcp-trace/bin/mcp-trace.cjs",
-        "proxy", "github", "--",
-        "docker", "run", "-i", "--rm",
-        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
-        "ghcr.io/github/github-mcp-server@sha256:..."
-      ],
-      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
-    }
-  }
-}</code></pre>
-      <p>Restart Claude Code so it picks up the new <code>command</code>.</p>
-    </section>
-
-    <section class="step">
-      <h3>7. After a session, look at what happened</h3>
-      <p>The SQLite file at <code>~/.mcp-trace/traces.db</code> has every JSON-RPC frame&rsquo;s metadata. Three subcommands query it.</p>
-      <pre><code>node bin/mcp-trace.cjs stats
-node bin/mcp-trace.cjs tools github
-node bin/mcp-trace.cjs tokens github</code></pre>
-      <p>You now know which tools your servers actually use, their p50/p95 latency, error rates, and a rough token-cost estimate.</p>
-    </section>
-
-    <section class="step">
-      <h3>8. Optional: audit your installed setup</h3>
-      <p>Diff what&rsquo;s actually installed against the vault DB. Flags drift, untrusted entries, unbounded heavy servers, and scope issues.</p>
-      <pre><code>node ~/.claude/skills/mcp-ecosystem-intelligence/scripts/audit_setup.cjs</code></pre>
-    </section>
-
-    <hr>
-
-    <p>
-      Both tools have useful local/offline paths. The vault&rsquo;s advisory feeds and
-      <code>mcp-trace</code>&rsquo;s registry-aware token estimates are <em>additive</em>
-      &mdash; the offline gate still runs.
-    </p>
-
-    <div class="links">
-      <a href="https://github.com/froggychips/mcp-skills-vault">vault on GitHub</a> &middot;
-      <a href="https://github.com/froggychips/mcp-trace">trace on GitHub</a>
-    </div>
-    <section class="step">
-      <h3>7. Ask why, before you argue with it</h3>
+      <h3>Ask why, before you argue with it</h3>
       <p>Every dimension with the date it was established, the policy in force, each rule with its
          outcome, and the rule that decided it. <code>--record</code> appends the decision as one
          JSON line, which is the audit trail a policy engine gets asked for months later.</p>
       <pre><code>npx -y @froggychips/mcp-vault explain &lt;name&gt;</code></pre>
     </section>
+
     <section class="step">
-      <h3>8. When something has an advisory</h3>
+      <h3>When something has an advisory</h3>
       <p>The shortest version that clears <em>every</em> advisory against the pin &mdash; not the
          newest release &mdash; with the candidate checked too, because &ldquo;fixed in 2.1.30&rdquo;
          means fixed for that one advisory.</p>
       <pre><code>npx -y @froggychips/mcp-vault upgrade</code></pre>
     </section>
+
     <section class="step">
-      <h3>9. Freeze what actually runs</h3>
+      <h3>Freeze what actually runs</h3>
       <p><code>npx -y pkg@1.2.3</code> re-resolves that package&rsquo;s dependency tree at every
          start: a pinned root does not pin its tree. <code>lock</code> records npm&rsquo;s own
          lockfile per server, <code>--check</code> diffs a fresh resolve against it, and
@@ -158,11 +162,39 @@ node bin/mcp-trace.cjs tokens github</code></pre>
       <pre><code>npx -y @froggychips/mcp-vault lock
 npx -y @froggychips/mcp-vault lock --check</code></pre>
     </section>
+
+    <section class="step">
+      <h3>Optional: verify the vault database offline</h3>
+      <p>For air-gapped smoke checks. It validates the stored pins only and makes no registry or advisory call.</p>
+      <pre><code>npx -y @froggychips/mcp-vault verify --offline</code></pre>
+    </section>
+
+    <section class="step">
+      <h3>Optional: install the vault as a Claude Code skill</h3>
+      <p>If you want Claude to call the vault by itself when you ask &ldquo;what MCP should I add?&rdquo;, drop the skill folder into your skills directory.</p>
+      <pre><code>git clone https://github.com/froggychips/mcp-skills-vault.git
+mkdir -p ~/.claude/skills
+cp -r mcp-skills-vault/mcp-ecosystem-intelligence ~/.claude/skills/</code></pre>
+    </section>
+
+    <hr>
+
+    <p class="muted">
+      Looking for <a href="/trace.html">mcp-trace</a>? It is an experimental sister
+      project installed from git; its page has the steps.
+    </p>
+
+    <div class="links">
+      <a href="/vault.html">CLI reference</a> &middot;
+      <a href="https://github.com/froggychips/mcp-skills-vault/blob/master/docs/GITHUB_ACTION.md">Action docs</a> &middot;
+      <a href="https://github.com/froggychips/mcp-skills-vault">GitHub</a> &middot;
+      <a href="https://www.npmjs.com/package/@froggychips/mcp-vault">npm</a>
+    </div>
   </main>
 
   <footer>
     <p>
-      <a href="https://github.com/froggychips">github.com/froggychips</a>
+      <a href="https://github.com/froggychips/mcp-skills-vault">github.com/froggychips/mcp-skills-vault</a>
       &middot; MIT licensed &middot; &copy; 2026 froggychips
     </p>
   </footer>

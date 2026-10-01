@@ -3,48 +3,61 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>mcp-trace — see what your MCP servers are doing</title>
-  <meta name="description" content="Stdio MITM proxy that logs JSON-RPC traffic between MCP client and server to a local SQLite file. Privacy by default.">
+  <title>mcp-trace (experimental) — local log of MCP tool calls</title>
+  <meta name="description" content="Experimental stdio proxy that logs MCP JSON-RPC metadata to local SQLite. Version 0.1, install from git; the npm package mcp-trace is unrelated.">
   <link rel="canonical" href="https://mcp.froggychips.xyz/trace.html">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="froggychips">
+  <meta property="og:site_name" content="mcp-vault">
   <meta property="og:url" content="https://mcp.froggychips.xyz/trace.html">
-  <meta property="og:title" content="mcp-trace — see what your MCP servers are doing">
-  <meta property="og:description" content="Stdio MITM proxy that logs MCP JSON-RPC traffic to a local SQLite file. Bodies never captured by default. Sister tool to mcp-skills-vault.">
+  <meta property="og:title" content="mcp-trace (experimental) — local log of MCP tool calls">
+  <meta property="og:description" content="Experimental sister project to mcp-vault: a stdio proxy that logs MCP JSON-RPC metadata to local SQLite. Install from git; not published to npm.">
   <meta property="og:image" content="https://mcp.froggychips.xyz/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="mcp-vault: offline security check for MCP configs">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="mcp-trace — see what your MCP servers are doing">
-  <meta name="twitter:description" content="Stdio MITM proxy that logs MCP JSON-RPC traffic to a local SQLite file. Bodies never captured by default.">
+  <meta name="twitter:title" content="mcp-trace (experimental) — local log of MCP tool calls">
+  <meta name="twitter:description" content="Experimental sister project to mcp-vault: a stdio proxy that logs MCP JSON-RPC metadata to local SQLite. Install from git; not published to npm.">
   <meta name="twitter:image" content="https://mcp.froggychips.xyz/og-image.png">
+  <meta name="twitter:image:alt" content="mcp-vault: offline security check for MCP configs">
 </head>
 <body>
   <header>
-    <nav>
+    <nav aria-label="Site">
       <a href="/">home</a>
-      <a href="/vault.html">vault</a>
-      <a href="/registry.html">registry</a>
-      <a href="/trace.html">trace</a>
       <a href="/install.html">install</a>
-      <a href="https://github.com/froggychips">github</a>
+      <a href="/vault.html">cli</a>
+      <a href="/registry.html">registry</a>
+      <a href="/trace.html" aria-current="page">trace</a>
+      <a href="https://github.com/froggychips/mcp-trace">github</a>
     </nav>
   </header>
 
   <main>
-    <h1>mcp-trace</h1>
+    <h1>mcp-trace <span class="tag">experimental</span></h1>
     <p class="lede">
-      Privacy-by-default stdio MITM proxy between an MCP client (Claude Code,
-      any other host) and an MCP server. Pairs request/response by id and
-      logs metadata to a local SQLite file. Sister project to
-      <a href="/vault.html">mcp-skills-vault</a>.
+      A privacy-by-default stdio proxy between an MCP client (Claude Code, Cursor,
+      VS Code, any other host) and an MCP server. It pairs JSON-RPC requests and
+      responses by id and logs metadata &mdash; method, tool, latency, errors &mdash;
+      to a local SQLite file. Experimental sister project to
+      <a href="/">mcp-vault</a>, which checks MCP configs before anything runs.
     </p>
 
-    <h2>Install</h2>
+    <h2>Status</h2>
+    <div class="release">
+      <ul>
+        <li><strong>Experimental, version 0.1.0</strong> (released 2026-05-22). Interfaces and the database schema may change without notice.</li>
+        <li><strong>Not published to npm.</strong> Install it from git, as below.</li>
+        <li><strong>The npm package called <code>mcp-trace</code> is someone else&rsquo;s</strong> &mdash; an unrelated project. Do not run <code>npx mcp-trace</code> expecting this tool.</li>
+        <li>No telemetry: everything stays in the local SQLite file.</li>
+      </ul>
+    </div>
+
+    <h2>Install from git</h2>
     <pre><code>git clone https://github.com/froggychips/mcp-trace.git
 cd mcp-trace
 node bin/mcp-trace.cjs --version</code></pre>
